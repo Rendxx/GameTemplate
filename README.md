@@ -1,0 +1,2 @@
+# GameTemplate
+Template for GameCenter
