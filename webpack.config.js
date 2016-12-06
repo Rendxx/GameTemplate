@@ -7,12 +7,12 @@ var extractTextPlugin = new ExtractTextPlugin("./[name].css")
 
 module.exports = {
     plugins: [
-      commonsPlugin,
+      //commonsPlugin,
       extractTextPlugin
     ],
     entry: {
-        host : './src/host/js/Main',
-        client : './src/client/js/Main'
+        host : './src/host/Index',
+        client : './src/client/Index'
     },
     output: {
         path: 'public/Content',
