@@ -1,10 +1,11 @@
-﻿var Style = require('../less/Prepare.less');
+var Style = require('../less/Prepare.less');
 
 var HTML = {
     playerList: '<div class="_playerList"></div>',
     item: '<div class="_item"></div>',
     colorSelector: '<div class="colorSelector"><span></span></div>',
     colorList: '<div class="_colorList"></div>',
+    colorItem: '<div class="_item"><span></span></div>',
     startBtn: '<div class="_start">START</div>'
 };
 
@@ -14,6 +15,7 @@ var CSS = {
 };
 
 var Prepare = function (container, opts_in) {
+    "use strick";
     // Property -------------------------------------
     var // html
         html = {
@@ -113,13 +115,15 @@ var Prepare = function (container, opts_in) {
 
         // color selector
         html['colorSelector'] = $(HTML.colorSelector).appendTo(html['container']);
-        html['colorList'] = $(HTML.colorList).appendTo(html['colorSelector']).addClass(CSS.hidden);
+        html['colorList'] = $(HTML.colorList).appendTo(html['container']).addClass(CSS.hidden);
         for (var i in colorOption) {
-            var ele = $(HTML.item).text(i).appendTo(html['colorList']);
+            var ele = $(HTML.colorItem).appendTo(html['colorList']);
+            ele.children('span').text(i);
             ele[0].style.backgroundColor = colorOption[i];
             if (colorId == null) _selectColor(i);
             ele.click({ id: i }, function (e) {
                 _selectColor(e.data.id);
+                html['colorList'].toggleClass(CSS.hidden);
             });
             html['colorItem'][i] = ele;
         }

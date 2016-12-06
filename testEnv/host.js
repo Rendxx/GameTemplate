@@ -1,3 +1,25 @@
+// test -----------------------------------------------------------------
+window.test={
+  renew : function (){
+    window.msg('1|1|SERVER|2|{"clients":{},"obs":{},"status":1,"setup":null,"game":null}');
+  },
+  add : function (num){
+    if (num>6) return;
+    var obj = {};
+    for (var i=1;i<=num;i++){
+      obj['c'+i] = "player "+i;
+    }
+    window.msg('1|2|SERVER|8|{"clients":'+JSON.stringify(obj)+'}');
+  }
+};
+
+console.group("%c TEST COMMAND ", 'background: #ddeeff; color: #003399;');
+console.log("%c test.renew() ", 'color: #003399;');
+console.log("%c test.add() ", 'color: #003399;');
+console.groupEnd();
+
+// ---------------------------------------------------------------------
+
 Rendxx = Rendxx || {};
 Rendxx.Game = Rendxx.Game || {};
 
@@ -6,7 +28,7 @@ Rendxx.Game = Rendxx.Game || {};
  */
 
 (function (Game) {
-    // ROOM STATUS 
+    // ROOM STATUS
     DATA= {
         ROOMSTATUS: {
             'READY': 1,
@@ -35,7 +57,7 @@ Rendxx.Game = Rendxx.Game || {};
         var that = this;
         var ws = null;
         var wsConnStr;
-        
+
         this.onopen = null;
         this.onmessage = null;
         this.onerror = null;
@@ -43,7 +65,7 @@ Rendxx.Game = Rendxx.Game || {};
 
         this.start = function () {
             if (ws != null) ws.close();
-            ws = new WebSocket(wsConnStr);
+            ws = {conn:wsConnStr};
             ws.onopen = function (evt) {
                 if (that.onopen != null) that.onopen(evt);
             };
@@ -56,14 +78,16 @@ Rendxx.Game = Rendxx.Game || {};
             ws.onclose = function (evt) {
                 if (that.onclose != null) that.onclose(evt);
             };
+            window.msg = function (msg){
+              ws.onmessage({data:msg});
+            };
+            ws.onopen();
         };
         this.stop = function () {
-            if (ws == null) return;
-            ws.close();
+          console.log("ws: [close]");
         };
         this.send = function (msg) {
-            if (ws == null) throw new Error('Connection is not available');
-            ws.send(msg);
+          console.log("ws: "+ msg);
         }
 
         var _init = function (opts) {
@@ -185,7 +209,7 @@ Rendxx.Game = Rendxx.Game || {};
  */
 
 (function (Game) {
-    // ROOM STATUS 
+    // ROOM STATUS
     var STATUS = Game.DATA.ROOMSTATUS;
 
     var Main = function (components_in) {
@@ -523,7 +547,7 @@ Rendxx.Game = Rendxx.Game || {};
                 throw new Error('Unexpected Error in setuping components: '+e.message);
             }
         };
-                
+
         var _init = function (components_in) {
             _setupComponent(components_in);
         }(components_in);

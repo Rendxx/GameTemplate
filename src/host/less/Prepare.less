@@ -21,7 +21,7 @@
 
         ._item {
             float: left;
-            width: 40%;
+            width: calc(40% - 2px);
             margin: 0 5%;
             height: 50px;
             line-height: 50px;
@@ -31,10 +31,9 @@
             left: 0;
             margin-top: 10px;
             font-size: 20px;
-            color: #111;
-            text-shadow: 0 0 10px #ffac00;
-            background-color: rgba(255, 255, 255, 0.6);
-            box-shadow: 0 0 5px #777;
+            color: #fff;
+            border-radius: 3px;
+            border:1px solid #ccc;
 
             &::after {
                 content: "[EMPTY]";
@@ -51,19 +50,11 @@
                 text-shadow: none;
             }
 
-            &::before {
-                content: "";
-                display: block;
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 3px;
-                height: 100%;
-                background-color: #e2a879;
-            }
-
             &._occupied {
-                background-color: rgba(255, 255, 255, 1);
+                background-color:#44698a;
+                border:1px solid #325c82;
+                box-shadow: 0 0 5px #999;
+
 
                 &::after {
                     display: none;
@@ -82,59 +73,79 @@
         line-height: 50px;
         margin: auto auto;
         cursor: pointer;
-        color: #666;
         font-size: 20px;
         text-align: center;
-        border:1px solid #888;
+        color:#fff;
+        background-color:#333;
+        border:1px solid #333;
+        box-shadow:0 0 5px #666;
         transition:0.2s;
+        border-radius: 3px;
 
         &:hover{
-            color:#fff;
-            background-color:#333;
-            border:1px solid #333;
+            background-color:#254d71;
+            border:1px solid #254d71;
             box-shadow:0 0 5px #666;
         }
     }
 
     .colorSelector {
         position:relative;
-        top:-52px;
+        top:-42px;
         left:50px;
-        width: 80px;
-        height: 50px;
+        width: 70px;
+        height: 20px;
         background-color: rgba(255, 255, 255, 0.29);
-        text-align: center;
-        color: #666;
         cursor: pointer;
-        border:1px solid #aaa;
-        line-height:50px;
+        border:5px solid #333;
+        line-height:20px;
+        box-shadow:0 0 5px #666;
 
         span {
             display: block;
-            padding: 0 20px;
+            margin-left:20px;
+            padding-left: 8px;
+            background-color: #333;
+            text-align: left;
+            color:#eee;
+        }
+    }
+
+    ._colorList {
+        position:relative;
+        width: 80px;
+        top:-42px;
+        left:50px;
+        transition: height 0.2s;
+        overflow: hidden;
+        box-shadow:0 0 5px #666;
+
+        &._hidden{
+            height:0;
         }
 
-        ._colorList {
-            width: 100%;
-            position: absolute;
-            top: 0;
-            left: 0;
-            background-color: #222;
-            transition: opacity 0.2s;
-            
-            &._hidden{
-                opacity:0;
+        ._item {
+            line-height:20px;
+            width: 70px;
+            height: 20px;
+            cursor: pointer;
+            border:5px solid #2b2b2b;
+            margin-top:1px;
+
+            span {
+                display: block;
+                margin-left:20px;
+                padding-left: 8px;
+                background-color: #2b2b2b;
+                text-align: left;
+                color:#eee;
             }
 
-            ._item {
-                height: 52px;
-                padding: 0 20px;
-                color: #333;
-                cursor: pointer;
-
-                &:hover {
-                    background-color: #111;
-                }
+            &:hover {
+              span{
+                background-color: #222;
+              }
+              border:5px solid #222;
             }
         }
     }

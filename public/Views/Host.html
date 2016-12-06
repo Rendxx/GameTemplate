@@ -21,23 +21,25 @@
     <div id="end" class="end"></div>
 
     <!--Script-->
+    <script type="text/javascript" src="/jQuery"></script>
     <script type="text/javascript" src="/TestEnv/host.js"></script>
     <script type="text/javascript" src="../Content/host.js"></script>
     <script type="text/javascript">
+        window.parent.HOSTID = 1;   // Fake Host ID
         var colorOption = {
-            'red': "#ffdddd",
-            'green': "#ddffdd",
-            'blue': "#ddddff"
+            'red': "#c14c4c",
+            'green': "#9bd24e",
+            'blue': "#4781b1"
         };
 
         var renderer = new Rendxx.Game.Host.Renderer({
-            prepare: new Render.Prepare(document.getElementById('prepare'), { maxPlayer: 6, colorOption: colorOption }),
-            main: new Render.Main(document.getElementById('main')),
-            end: new Render.End(document.getElementById('end'))
+            prepare: new GAME.Render.Prepare(document.getElementById('prepare'), { maxPlayer: 6, colorOption: colorOption }),
+            main: new GAME.Render.Main(document.getElementById('main')),
+            end: new GAME.Render.End(document.getElementById('end'))
         });
         var host = new Rendxx.Game.Host.Main({
-            clientList: new ClientList({ max: 6 }),
-            game: new GameCore(),
+            clientList: new GAME.ClientList({ max: 6 }),
+            game: new GAME.Core(),
             renderer: renderer
         });
         host.setup();

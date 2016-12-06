@@ -1,9 +1,8 @@
 var webpack = require('webpack');
 var path = require('path');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
-var node_modules = path.resolve(__dirname, 'node_modules');
 var commonsPlugin = new webpack.optimize.CommonsChunkPlugin('common.js');
-var extractTextPlugin = new ExtractTextPlugin("./[name].css")
+var extractTextPlugin = new ExtractTextPlugin("./[name].css");
 
 module.exports = {
     plugins: [

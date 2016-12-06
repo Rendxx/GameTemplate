@@ -48,11 +48,19 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var ClientList = __webpack_require__(/*! ./js/ClientList.js */ 1);
-	var GameCore = __webpack_require__(/*! ./js/GameCore.js */ 2);
+	var Core = __webpack_require__(/*! ./js/Core.js */ 2);
 	var Render = {
 	  Prepare: __webpack_require__(/*! ./js/Render.Prepare.js */ 3),
 	  Main: __webpack_require__(/*! ./js/Render.Main.js */ 8),
 	  End: __webpack_require__(/*! ./js/Render.End.js */ 11)
+	};
+	
+	var Style = __webpack_require__(/*! ./less/Index.less */ 14);
+	
+	window.GAME = {
+	  ClientList: ClientList,
+	  Core: Core,
+	  Render: Render
 	};
 
 /***/ },
@@ -189,12 +197,12 @@
 
 /***/ },
 /* 2 */
-/*!*********************************!*\
-  !*** ./src/host/js/GameCore.js ***!
-  \*********************************/
+/*!*****************************!*\
+  !*** ./src/host/js/Core.js ***!
+  \*****************************/
 /***/ function(module, exports) {
 
-	var GameCore = function () {
+	var Core = function () {
 	    // property -----------------------------------------------
 	    var that = this,
 	        start = false,
@@ -302,7 +310,7 @@
 	    var _init = function () {}();
 	};
 	
-	module.exports = GameCore;
+	module.exports = Core;
 
 /***/ },
 /* 3 */
@@ -318,6 +326,7 @@
 	    item: '<div class="_item"></div>',
 	    colorSelector: '<div class="colorSelector"><span></span></div>',
 	    colorList: '<div class="_colorList"></div>',
+	    colorItem: '<div class="_item"><span></span></div>',
 	    startBtn: '<div class="_start">START</div>'
 	};
 	
@@ -327,7 +336,9 @@
 	};
 	
 	var Prepare = function (container, opts_in) {
+	    "use strick";
 	    // Property -------------------------------------
+	
 	    var // html
 	    html = {
 	        container: $(container),
@@ -428,13 +439,15 @@
 	
 	        // color selector
 	        html['colorSelector'] = $(HTML.colorSelector).appendTo(html['container']);
-	        html['colorList'] = $(HTML.colorList).appendTo(html['colorSelector']).addClass(CSS.hidden);
+	        html['colorList'] = $(HTML.colorList).appendTo(html['container']).addClass(CSS.hidden);
 	        for (var i in colorOption) {
-	            var ele = $(HTML.item).text(i).appendTo(html['colorList']);
+	            var ele = $(HTML.colorItem).appendTo(html['colorList']);
+	            ele.children('span').text(i);
 	            ele[0].style.backgroundColor = colorOption[i];
 	            if (colorId == null) _selectColor(i);
 	            ele.click({ id: i }, function (e) {
 	                _selectColor(e.data.id);
+	                html['colorList'].toggleClass(CSS.hidden);
 	            });
 	            html['colorItem'][i] = ele;
 	        }
@@ -592,6 +605,16 @@
 /*!********************************!*\
   !*** ./src/host/less/End.less ***!
   \********************************/
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 13 */,
+/* 14 */
+/*!**********************************!*\
+  !*** ./src/host/less/Index.less ***!
+  \**********************************/
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin

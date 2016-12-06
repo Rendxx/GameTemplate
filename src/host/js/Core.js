@@ -1,4 +1,4 @@
-var GameCore = function () {
+var Core = function () {
     // property -----------------------------------------------
     var that = this,
         start = false,
@@ -108,4 +108,4 @@ var GameCore = function () {
     }();
 };
 
-module.exports = GameCore;
+module.exports = Core;
