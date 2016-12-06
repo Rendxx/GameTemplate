@@ -1,0 +1,21 @@
+{
+  "name": "package",
+  "version": "0.0.0",
+  "private": true,
+  "devDependencies": {
+    "body-parser": "^1.4.3",
+    "express": "^4.4.5",
+    "babel-core": "*",
+    "babel-loader": "*",
+    "babel-preset-react": "*",
+    "css-loader": "*",
+    "extract-text-webpack-plugin": "*",
+    "jsx-loader": "*",
+    "less": "*",
+    "less-loader": "*",
+    "style-loader": "*",
+    "url-loader": "*",
+    "file-loader": "*",
+    "webpack": "^1.13.2"
+  }
+}
