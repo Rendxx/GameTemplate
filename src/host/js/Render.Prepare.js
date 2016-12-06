@@ -110,7 +110,8 @@ var Prepare = function (container, opts_in) {
         // start btn
         html['startBtn'] = $(HTML.startBtn).appendTo(html['container']);
         html['startBtn'].click(function () {
-            $.get('/Host/Start');
+          window.test.start();
+          //$.get('/Host/Start');
         });
 
         // color selector

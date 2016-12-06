@@ -10,12 +10,18 @@ window.test={
       obj['c'+i] = "player "+i;
     }
     window.msg('1|2|SERVER|8|{"clients":'+JSON.stringify(obj)+'}');
-  }
+  },
+  start : function (){
+    window.msg('1|3|SERVER|12|null');
+  },
+
+
 };
 
 console.group("%c TEST COMMAND ", 'background: #ddeeff; color: #003399;');
 console.log("%c test.renew() ", 'color: #003399;');
-console.log("%c test.add() ", 'color: #003399;');
+console.log("%c test.add(3) ", 'color: #003399;');
+console.log("%c test.start() ", 'color: #003399;');
 console.groupEnd();
 
 // ---------------------------------------------------------------------

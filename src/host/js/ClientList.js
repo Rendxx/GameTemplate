@@ -3,32 +3,25 @@ var ClientList = function (opts_in) {
     // Property -----------------------------------------------
     var that = this,
         _max = 5,
-        _isLocker = false,
-            obCount = 0;
+        _isLocker = false;
 
     var clients = {},       // { id:<number>, name:<string>, number:<number>}
-        obs = {},           // { id:<number>, name:<string>, number:<number>}
         players = [];       // queue of players, starts from 0
 
     // callback ------------------------------------------
     this.onUpdateClient = null;
-    this.onUpdateOb = null;
+    this.onUpdateOb = null;   // deprecated
 
     // API -----------------------------------------------
     // reset game with given data
-    this.reset = function (clientData, obData) {
+    this.reset = function (clientData) {
         clients = {};
-        obs = {};
         players = [];
         for (var i = 0; i < _max; i++) players[i] = null;
         for (var id in clientData) {
             addClient(id, clientData[id]);
         }
-        for (var id in obData) {
-            addOb(id, obData[id]);
-        }
         if (this.onUpdateClient) this.onUpdateClient(clients);
-        if (this.onUpdateOb) this.onUpdateOb(obs);
     };
 
     // refresh client list
@@ -44,17 +37,9 @@ var ClientList = function (opts_in) {
         if (this.onUpdateClient) this.onUpdateClient(clients);
     };
 
-    // refresh client list
+    // refresh ob list
     this.updateObList = function (obData) {
-        for (var id in obs) {
-            if (id in obData) continue;
-            removeOb(id);
-        }
-        for (var id in obData) {
-            if (id in obs) continue;
-            addOb(id, obData[id]);
-        }
-        if (this.onUpdateOb) this.onUpdateOb(obs);
+      // deprecated
     };
 
     // get client data
@@ -98,18 +83,6 @@ var ClientList = function (opts_in) {
         if (n == -1) return;
         if (_isLocker) return;
         players[n] = null;
-    };
-
-    var addOb = function (id, name) {
-        obs[id] = {
-            id: id,
-            name: name,
-            number: obCount++
-        };
-    };
-
-    var removeOb = function (id) {
-        delete obs[id];
     };
 
     // Setup -----------------------------------------------
