@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Template</title>                                                             <!-- TODO: Page title -->    
+    <link href="/Game/Template/content/host.css" rel="stylesheet" type="text/css" />    <!-- TODO: Style file in absolute path -->
+</head>
+<body>
+    <!-- TODO:
+        For Prepare, Main, End block:
+        You can program HTML code here and modify its content later, or create all content in js later.
+     -->
+    <!--Prepare-->
+    <div id="prepare" class="prepare"></div>
+
+    <!--Main-->
+    <div id="main" class="main"></div>
+
+    <!--End-->
+    <div id="end" class="end"></div>
+
+
+
+    <!--Script-->
+    <script type="text/javascript" src="/wwwroot/lib/jquery.min.js"></script>
+    <script type="text/javascript" src="/wwwroot/scripts/host/host.js"></script>
+    <script type="text/javascript" src="/Game/Template/content/host.js"></script>
+    <script type="text/javascript">
+        var colorOption = {
+            'red': "#ffdddd",
+            'green': "#ddffdd",
+            'blue': "#ddddff"
+        };
+
+        var renderer = new Rendxx.Game.Host.Renderer({
+            prepare: new Rendxx.Game.Template.Host.Render.Prepare(document.getElementById('prepare'), { maxPlayer: 6, colorOption: colorOption }),
+            main: new Rendxx.Game.Test.Host.Render.Main(document.getElementById('main')),
+            end: new Rendxx.Game.Test.Host.Render.End(document.getElementById('end'))
+        });
+        var host = new Rendxx.Game.Host.Main({
+            clientList: new Rendxx.Game.Test.Host.ClientList({ max: 6 }),
+            game: new Rendxx.Game.Test.Host.GameCore(),
+            renderer: renderer
+        });
+        host.setup();
+    </script>
+</body>
+</html>

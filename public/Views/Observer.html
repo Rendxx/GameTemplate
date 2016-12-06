@@ -1,0 +1,44 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test</title>
+    <!--Style-->
+    <link href="/Game/Test/content/observer.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <!--Loading-->
+    <!--<div class="loading">LOADING</div>-->
+
+    <!--Prepare-->
+    <div class="prepare">
+        <div class="_title">HOST OF TEST</div>
+        <div class="_line"></div>
+        <div class="_clients"></div>
+        <div class="_line"></div>
+    </div>
+
+    <!--Main-->
+    <div class="main"></div>
+
+    <!--End-->
+    <div class="end"></div>
+
+    <!--Script-->
+    <script type="text/javascript" src="/wwwroot/lib/jquery.min.js"></script>
+    <script type="text/javascript" src="/wwwroot/scripts/observer/observer.js"></script>
+    <script type="text/javascript" src="/Game/Test/content/observer.js"></script>
+    <script type="text/javascript">
+        var renderer = new Rendxx.Game.Observer.Renderer({
+            prepare: new Rendxx.Game.Test.Observer.Render.Prepare(),
+            main: new Rendxx.Game.Test.Observer.Render.Main(),
+            end: new Rendxx.Game.Test.Observer.Render.End()
+        });
+        var observer = new Rendxx.Game.Observer.Main({
+            renderer: renderer
+        });
+        observer.setup();
+    </script>
+</body>
+</html>

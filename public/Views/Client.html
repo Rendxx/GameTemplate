@@ -1,0 +1,29 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test</title>
+    <!--Style-->
+    <link href="/Game/Test/content/client.css" rel="stylesheet" type="text/css" />
+    <link type="text/css" rel="stylesheet" href="/Game/Test/ClientController/controller.info.css" />
+    <link type="text/css" rel="stylesheet" href="/Game/Test/ClientController/controller.button.css" />
+</head>
+<body>
+    <!--Content-->
+    <div class="controller"></div>
+
+    <!--Script-->
+    <script type="text/javascript" src="/Game/Test/ClientController/controller.info.js"></script>
+    <script type="text/javascript" src="/Game/Test/ClientController/controller.button.js"></script>
+    <script type="text/javascript" src="/wwwroot/lib/jquery.min.js"></script>
+    <script type="text/javascript" src="/wwwroot/scripts/client/client.js"></script>
+    <script type="text/javascript" src="/Game/Test/content/client.js"></script>
+    <script type="text/javascript">
+        var client = new Rendxx.Game.Client.Main({
+            ui: new Rendxx.Game.Test.Client.ControlPad()
+        });
+        client.setup();
+    </script>
+</body>
+</html>

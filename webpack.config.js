@@ -11,11 +11,11 @@ module.exports = {
       extractTextPlugin
     ],
     entry: {
-        main : './src/main/js/Main',
+        host : './src/host/js/Main',
         client : './src/client/js/Main'
     },
     output: {
-        path: 'public/wwwroot',
+        path: 'public/Content',
         filename: '[name].js'
     },
     module: {
@@ -23,11 +23,7 @@ module.exports = {
             {
               test: /\.js|jsx$/,
               exclude: /node_modules/,
-              loader: 'babel',
-              query:
-                {
-                  presets:['react']
-                }
+              loader: 'babel'
             },
             {
               test: /\.css$/,
@@ -49,8 +45,7 @@ module.exports = {
               exclude: /node_modules/,
               loader : 'file-loader?name=../style/[name].[ext]'
             }
-        ],
-        noParse: [pathToReact]
+        ]
     },
     resolve: {
         extensions: ['', '.js', '.json', '.scss']

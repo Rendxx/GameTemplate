@@ -1,0 +1,141 @@
+﻿.prepare {
+    width: 500px;
+    height: 500px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: 0;
+    margin-top: -250px;
+    margin-left: -250px;
+    padding: 0;
+    border: 0;
+    display: none;
+
+
+    ._playerList {
+        overflow: hidden;
+        width: 100%;
+        padding: 30px 0;
+        border-bottom:1px dashed #929292;
+        margin-bottom:30px;
+
+        ._item {
+            float: left;
+            width: 40%;
+            margin: 0 5%;
+            height: 50px;
+            line-height: 50px;
+            text-align: center;
+            position: relative;
+            top: 0;
+            left: 0;
+            margin-top: 10px;
+            font-size: 20px;
+            color: #111;
+            text-shadow: 0 0 10px #ffac00;
+            background-color: rgba(255, 255, 255, 0.6);
+            box-shadow: 0 0 5px #777;
+
+            &::after {
+                content: "[EMPTY]";
+                display: block;
+                position: absolute;
+                top: 0;
+                left: 50%;
+                margin-left: -50px;
+                width: 100px;
+                height: 50px;
+                line-height: 50px;
+                color: #999;
+                font-size: 14px;
+                text-shadow: none;
+            }
+
+            &::before {
+                content: "";
+                display: block;
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 3px;
+                height: 100%;
+                background-color: #e2a879;
+            }
+
+            &._occupied {
+                background-color: rgba(255, 255, 255, 1);
+
+                &::after {
+                    display: none;
+                }
+
+                &::before {
+                    background-color: #3f8fff;
+                }
+            }
+        }
+    }
+
+    ._start {
+        width: 160px;
+        height: 50px;
+        line-height: 50px;
+        margin: auto auto;
+        cursor: pointer;
+        color: #666;
+        font-size: 20px;
+        text-align: center;
+        border:1px solid #888;
+        transition:0.2s;
+
+        &:hover{
+            color:#fff;
+            background-color:#333;
+            border:1px solid #333;
+            box-shadow:0 0 5px #666;
+        }
+    }
+
+    .colorSelector {
+        position:relative;
+        top:-52px;
+        left:50px;
+        width: 80px;
+        height: 50px;
+        background-color: rgba(255, 255, 255, 0.29);
+        text-align: center;
+        color: #666;
+        cursor: pointer;
+        border:1px solid #aaa;
+        line-height:50px;
+
+        span {
+            display: block;
+            padding: 0 20px;
+        }
+
+        ._colorList {
+            width: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-color: #222;
+            transition: opacity 0.2s;
+            
+            &._hidden{
+                opacity:0;
+            }
+
+            ._item {
+                height: 52px;
+                padding: 0 20px;
+                color: #333;
+                cursor: pointer;
+
+                &:hover {
+                    background-color: #111;
+                }
+            }
+        }
+    }
+}
