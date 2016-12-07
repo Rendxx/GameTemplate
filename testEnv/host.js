@@ -90,10 +90,10 @@ Rendxx.Game = Rendxx.Game || {};
             ws.onopen();
         };
         this.stop = function () {
-          console.log("ws: [close]");
+          console.log("%c ws: [close] ", "color:#660000; background: #ffdddd");
         };
         this.send = function (msg) {
-          console.log("ws: "+ msg);
+          console.log("%c ws: "+ msg+" ",  "color:#006600; background: #ddffdd");
         }
 
         var _init = function (opts) {
