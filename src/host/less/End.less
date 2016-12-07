@@ -1,41 +1,60 @@
 ﻿
 .end{
     display:none;
-    ._content{
-        padding: 5px;
-        line-height:20px;
-        width:200px;
-        height:200px;
-        color:#333;
-        background-color:#eee;
-        display:block;
+    ._list{
+        width:400px;
+        height:400px;
         position:absolute;
         top:50%;
         left:50%;
-        margin-left:-105px;
-        margin-top:-105px;
-        text-align:center;
-        font-size:14px;
+        margin-left:-201px;
+        margin-top:-201px;
+        overflow:visible;
+
+        ._player{
+            margin: 0 20px;
+            margin-top: 10px;
+            height: 50px;
+            line-height: 50px;
+            text-align: left;
+            padding: 0 20px;
+            font-size: 20px;
+            color: #fff;
+            border:1px solid #ccc;
+            background-color: #999;
+            box-shadow: 0 0 5px #666;
+
+            &._win{
+                border:1px solid #ffcc00;
+                background-color: #ff9900;
+                box-shadow: 0 0 5px #ff9900;
+            }
+        }
     }
-    
-    ._renew{
-        height:40px;
-        width:120px;
-        background-color:#ddd;
-        color:#333;
-        text-align:center;
-        line-height:40px;
-        font-size:16px;
-        cursor:pointer;
+
+    ._renew {
         position:absolute;
         top:50%;
         left:50%;
-        margin-left:-60px;
-        margin-top:-220px;
+        margin-left:-80px;
+        margin-top:200px;
+        width: 160px;
+        height: 50px;
+        line-height: 50px;
+        cursor: pointer;
+        font-size: 20px;
+        text-align: center;
+        color:#fff;
+        background-color:#333;
+        border:1px solid #333;
+        box-shadow:0 0 5px #666;
+        transition:0.2s;
+        border-radius: 3px;
 
         &:hover{
-            color:#fff;
-            background-color:#5e5e5e;
+            background-color:#254d71;
+            border:1px solid #254d71;
+            box-shadow:0 0 5px #666;
         }
     }
 }

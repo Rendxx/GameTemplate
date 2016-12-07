@@ -1,20 +1,33 @@
 ﻿var Style = require('../less/End.less');
 
-var End = function () {
+var HTML = {
+    list: '<div class="_list"></div>',
+    player: '<div class="_player"></div>',
+    renewBtn: '<div class="_renew">RENEW</div>'
+};
+
+var CSS = {
+    win: '_win'
+};
+
+var End = function (container) {
     var html_wrap = $('.end'),
-        isShown = false,
         html_content = null,
         html_renew = null;
 
+    var html = {
+        container: $(container),
+        board : null,
+        renew : null
+    };
+
     // interface controll --------------------------------
     this.show = function () {
-        isShown = true;
-        html_wrap.fadeIn();
+        html['container'].fadeIn();
     };
 
     this.hide = function () {
-        isShown = false;
-        html_wrap.fadeOut();
+        html['container'].fadeOut();
     };
 
     // Update ---------------------------------------
@@ -27,19 +40,27 @@ var End = function () {
     this.updateGame = function (gameData) {
         if (gameData && gameData.end) {
             var s = "";
-            for (var i in gameData.end) {
-                s += gameData.end[i].name + " : " + (gameData.end[i].win?'WIN':'LOST')+"<br/>";
+            html['list'].empty();
+            var end = gameData.end;
+            for (var i=0;i<end.length;i++){
+                _addPlayer(end[i].name, end[i].win);
             }
-            html_content.html(s);
         }
     };
 
     // Private ---------------------------------------
+    var _addPlayer = function (name, win){
+        var playerNode = $(HTML.player).appendTo(html['list']).text(name);
+        if (win) playerNode.addClass(CSS.win);
+    };
+
+    // setup -----------------------------------------------
     var _setupHtml = function () {
-        html_content = $('<div class="_content">[END]</div>').appendTo(html_wrap);
-        html_renew = $('<div class="_renew">RENEW</div>').appendTo(html_wrap);
-        html_renew.click(function () {
-            $.get('/Host/Renew');
+        html['list'] = $(HTML.list).appendTo(html['container']);
+        html['renew'] = $(HTML.renewBtn).appendTo(html['container']);
+        html['renew'].click(function () {
+            window.test.renew();
+            //$.get('/Host/Renew');
         });
     };
 

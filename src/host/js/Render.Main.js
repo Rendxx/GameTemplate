@@ -31,6 +31,7 @@ var Main = function (container) {
     // update ---------------------------------------------
     this.reset = function (setupData) {
         if (setupData==null) return;
+        _clear();
         var player = setupData.player;
         var color = setupData.color;
         cache_pos = setupData.playerPos;
@@ -58,6 +59,10 @@ var Main = function (container) {
     this.continue = function () { };
 
     // private ---------------------------------------------
+    var _clear = function (){
+        html['board'].empty();
+        html['player']=[];
+    };
     var _render = function (){
         width = html['board'].width();
         height = html['board'].height();

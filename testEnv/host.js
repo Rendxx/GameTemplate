@@ -2,7 +2,7 @@
 (function(){
   var playerNum = 0;
   window.test={
-    renew : function (){
+    reset : function (){
       window.msg('1|1|SERVER|2|{"clients":{},"obs":{},"status":1,"setup":null,"game":null}');
     },
     add : function (num){
@@ -32,17 +32,30 @@
         console.log("%c Illegal Command ", 'color: #cc0000;');
         return;
       }
-      window.msg('2|4|c'+id+'|3|END');
+      window.msg('2|4|c'+id+'|3|"END"');
+    },
+    end : function (){
+      window.msg('1|5|SERVER|13|null');
+    },
+    renew : function (){
+      window.msg('1|6|SERVER|14|null');
     }
   };
 
+  console.group("%c COMMAND FOR PROGRAM", 'background: #eeeeee; color: #666666;');
+  console.log("%c test.start() ", 'color: #666666;');
+  console.log("%c test.end() ", 'color: #666666;');
+  console.log("%c test.renew() ", 'color: #666666;');
+  console.groupEnd();
+  console.log('');
+
   console.group("%c TEST COMMAND ", 'background: #ddeeff; color: #003399;');
-  console.log("%c test.renew() ", 'color: #003399;');
+  console.log("%c test.reset() ", 'color: #003399;');
   console.log("%c test.add(3) ", 'color: #003399;');
-  console.log("%c test.start() ", 'color: #003399;');
   console.log("%c test.client(1,10,10) ", 'color: #003399;');
   console.log("%c test.win(1) ", 'color: #003399;');
   console.groupEnd();
+  console.log('');
 })();
 
 // ---------------------------------------------------------------------
@@ -119,7 +132,7 @@ Rendxx.Game = Rendxx.Game || {};
 
         var _init = function (opts) {
             window.onbeforeunload = function () {
-                if (ws != null) ws.close();
+                if (ws != null) ws.onclose();
             };
             if (opts == null || opts.type == null || opts.id == null) throw new Error('WebSocket Parameter Missing');
 

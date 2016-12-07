@@ -178,7 +178,6 @@
 	    // property -----------------------------------------------
 	    var that = this,
 	        start = false,
-	        msg = null,
 	        _color = null,
 	        _players = null,
 	        _playersId = null,
@@ -193,19 +192,24 @@
 	    this.action = function (clientId, dat) {
 	        if (!start) return;
 	
-	        if (dat.dat == "END") {
-	            var p = {};
-	            for (var i in _playerMap) {
-	                p[_players[_playerMap[i]].id] = { name: _players[_playerMap[i]].name, win: false };
+	        if (dat == "END") {
+	            var p = [];
+	            for (var i = 0; i < _players.length; i++) {
+	                p[i] = { id: _players[i].id, name: _players[i].name, win: false };
 	            }
-	            p[_players[_playerMap[clientId]].id].win = true;
-	            this.onUpdated({ end: p });
+	            p[_playerMap[clientId]].win = true;
+	            this.onUpdated({
+	                end: p,
+	                pos: _playerPos
+	            });
 	            for (var i = 0; i < _players.length; i++) {
 	                this.clientUpdate([_players[i].id], {
-	                    end: p[_players[i].id].win
+	                    end: p[i].win
 	                });
 	            }
+	            window.test.end();
 	            //$.get('/Host/End')
+	            start = false;
 	        } else {
 	            var pos = _playerPos[_playerMap[clientId]];
 	            pos[0] = Math.max(0, Math.min(100, pos[0] + dat[0]));
@@ -503,6 +507,7 @@
 	    // update ---------------------------------------------
 	    this.reset = function (setupData) {
 	        if (setupData == null) return;
+	        _clear();
 	        var player = setupData.player;
 	        var color = setupData.color;
 	        cache_pos = setupData.playerPos;
@@ -529,6 +534,10 @@
 	    this.continue = function () {};
 	
 	    // private ---------------------------------------------
+	    var _clear = function () {
+	        html['board'].empty();
+	        html['player'] = [];
+	    };
 	    var _render = function () {
 	        width = html['board'].width();
 	        height = html['board'].height();
@@ -576,21 +585,34 @@
 
 	var Style = __webpack_require__(/*! ../less/End.less */ 12);
 	
-	var End = function () {
+	var HTML = {
+	    list: '<div class="_list"></div>',
+	    player: '<div class="_player"></div>',
+	    renewBtn: '<div class="_renew">RENEW</div>'
+	};
+	
+	var CSS = {
+	    win: '_win'
+	};
+	
+	var End = function (container) {
 	    var html_wrap = $('.end'),
-	        isShown = false,
 	        html_content = null,
 	        html_renew = null;
 	
+	    var html = {
+	        container: $(container),
+	        board: null,
+	        renew: null
+	    };
+	
 	    // interface controll --------------------------------
 	    this.show = function () {
-	        isShown = true;
-	        html_wrap.fadeIn();
+	        html['container'].fadeIn();
 	    };
 	
 	    this.hide = function () {
-	        isShown = false;
-	        html_wrap.fadeOut();
+	        html['container'].fadeOut();
 	    };
 	
 	    // Update ---------------------------------------
@@ -601,19 +623,27 @@
 	    this.updateGame = function (gameData) {
 	        if (gameData && gameData.end) {
 	            var s = "";
-	            for (var i in gameData.end) {
-	                s += gameData.end[i].name + " : " + (gameData.end[i].win ? 'WIN' : 'LOST') + "<br/>";
+	            html['list'].empty();
+	            var end = gameData.end;
+	            for (var i = 0; i < end.length; i++) {
+	                _addPlayer(end[i].name, end[i].win);
 	            }
-	            html_content.html(s);
 	        }
 	    };
 	
 	    // Private ---------------------------------------
+	    var _addPlayer = function (name, win) {
+	        var playerNode = $(HTML.player).appendTo(html['list']).text(name);
+	        if (win) playerNode.addClass(CSS.win);
+	    };
+	
+	    // setup -----------------------------------------------
 	    var _setupHtml = function () {
-	        html_content = $('<div class="_content">[END]</div>').appendTo(html_wrap);
-	        html_renew = $('<div class="_renew">RENEW</div>').appendTo(html_wrap);
-	        html_renew.click(function () {
-	            $.get('/Host/Renew');
+	        html['list'] = $(HTML.list).appendTo(html['container']);
+	        html['renew'] = $(HTML.renewBtn).appendTo(html['container']);
+	        html['renew'].click(function () {
+	            window.test.renew();
+	            //$.get('/Host/Renew');
 	        });
 	    };
 	

@@ -2,7 +2,6 @@ var Core = function () {
     // property -----------------------------------------------
     var that = this,
         start = false,
-        msg = null,
         _color = null,
         _players = null,
         _playersId = null,
@@ -18,19 +17,24 @@ var Core = function () {
     this.action = function (clientId, dat) {
         if (!start) return;
 
-        if (dat.dat == "END") {
-            var p = {};
-            for (var i in _playerMap) {
-                p[_players[_playerMap[i]].id] = { name: _players[_playerMap[i]].name, win: false };
+        if (dat == "END") {
+            var p = [];
+            for (var i = 0; i < _players.length; i++) {
+                p[i]  = { id: _players[i].id, name: _players[i].name, win: false };
             }
-            p[_players[_playerMap[clientId]].id].win = true;
-            this.onUpdated({ end: p });
+            p[_playerMap[clientId]].win = true;
+            this.onUpdated({
+              end: p,
+              pos: _playerPos
+            });
             for (var i = 0; i < _players.length; i++) {
                 this.clientUpdate([_players[i].id], {
-                    end: p[_players[i].id].win
+                    end: p[i].win
                 });
             }
+            window.test.end();
             //$.get('/Host/End')
+            start=false;
         } else {
             var pos = _playerPos[_playerMap[clientId]];
             pos[0]= Math.max(0, Math.min(100,pos[0]+dat[0]));
