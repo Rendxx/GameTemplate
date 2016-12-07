@@ -3,35 +3,32 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Template</title>                                                             <!-- TODO: Page title -->
+    <title>Template</title>                                                 <!-- TODO: Page title -->
     <link href="../Content/host.css" rel="stylesheet" type="text/css" />    <!-- TODO: Style file in absolute path -->
 </head>
 <body>
-    <!-- TODO:
-        For Prepare, Main, End block:
-        You can program HTML code here and modify its content later, or create all content in js later.
-     -->
-    <!--Prepare-->
-    <div id="prepare" class="prepare"></div>
-
-    <!--Main-->
-    <div id="main" class="main"></div>
-
-    <!--End-->
-    <div id="end" class="end"></div>
+    <div id="prepare" class="prepare"></div>    <!--Prepare screen-->
+    <div id="main" class="main"></div>          <!--Main screen-->
+    <div id="end" class="end"></div>            <!--End screen-->
 
     <!--Script-->
-    <script type="text/javascript" src="/jQuery"></script>
-    <script type="text/javascript" src="/TestEnv/host.js"></script>
-    <script type="text/javascript" src="../Content/host.js"></script>
+    <script type="text/javascript" src="/jQuery"></script>                <!-- TODO: load jQuery  -->
+    <script type="text/javascript" src="/TestEnv/host.js"></script>       <!-- TODO: load host file provided by GameCenter -->
+    <script type="text/javascript" src="../Content/host.js"></script>     <!-- TODO: load game host file  -->
     <script type="text/javascript">
-        window.parent.HOSTID = 1;   // Fake Host ID
+        window.parent.HOSTID = 1;     /* TODO: Fake HOSTID, remove this line in real env */
+
+        /* TODO:
+            1. build game options and pass it to Prepare-Module
+            2. create Renderer width Prepare-Module, Main-Module and End-Module
+            3. create Host instance with ClientList-Module, GameCore-Module and the Renderer just created
+            4. setup the Host instance
+        */
         var colorOption = {
             'red': "#c14c4c",
             'green': "#9bd24e",
             'blue': "#4781b1"
         };
-
         var renderer = new Rendxx.Game.Host.Renderer({
             prepare: new GAME.Render.Prepare(document.getElementById('prepare'), { maxPlayer: 6, colorOption: colorOption }),
             main: new GAME.Render.Main(document.getElementById('main')),

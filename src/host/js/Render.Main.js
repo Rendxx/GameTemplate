@@ -1,3 +1,8 @@
+/* TODO:
+    Main-Screen is the main screen.
+    It renders the game.
+*/
+
 ﻿var Style = require('../less/Main.less');
 
 var HTML = {
@@ -6,6 +11,8 @@ var HTML = {
 };
 
 var Main = function (container) {
+    "use strick";
+    // property -----------------------------------------------
     var width = 0,
         height = 0;
     var cache_pos = null;
@@ -16,20 +23,22 @@ var Main = function (container) {
     };
 
     // callback ------------------------------------------
-    this.onSetuped = null;      // ()
 
     // interface controll --------------------------------
     this.show = function () {
+        /* TODO: show Main-Screen */
         html['container'].fadeIn();
         _render();
     };
 
     this.hide = function () {
+        /* TODO: hide Main-Screen */
         html['container'].fadeOut();
     };
 
     // update ---------------------------------------------
     this.reset = function (setupData) {
+        /* TODO: initialize the game */
         if (setupData==null) return;
         _clear();
         var player = setupData.player;
@@ -42,21 +51,27 @@ var Main = function (container) {
     };
 
     this.updateClientList = function (clientData) {
+        /* TODO: do nothing */
     };
 
     this.updateObList = function (obData) {
-      // deprecated
+        /* TODO: deprecated */
     };
 
     this.updateGame = function (gameData) {
+        /* TODO: update the game with game data */
         if (gameData == null) return;
         cache_pos = gameData.pos;
         _render();
     };
 
     // game ------------------------------------------------
-    this.pause = function () { };
-    this.continue = function () { };
+    this.pause = function () {
+        /* TODO: game parse */
+    };
+    this.continue = function () {
+        /* TODO: game continue */
+     };
 
     // private ---------------------------------------------
     var _clear = function (){

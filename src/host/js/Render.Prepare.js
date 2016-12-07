@@ -1,3 +1,8 @@
+/* TODO:
+    Prepare-Screen is the screen before game starting.
+    You can set game options while waiting for other players.
+*/
+
 var Style = require('../less/Prepare.less');
 
 var HTML = {
@@ -33,42 +38,41 @@ var Prepare = function (container, opts_in) {
         colorOption = null,
         colorId = null,
 
-        // flag
-        isShown = false,
-
         // cache
-        cache_client = null,
-        cache_ob = null,
-        cache_game = null;
+        cache_client = null;
 
     // Callback -------------------------------------
 
     // interface controll --------------------------------
     this.show = function () {
-        isShown = true;
+        /* TODO: show Prepare-Screen */
         _renderClient(cache_client);
         html['container'].fadeIn();
     };
 
     this.hide = function () {
-        isShown = false;
+        /* TODO: hide Prepare-Screen */
         html['container'].fadeOut();
     };
 
     // Update ---------------------------------------
     this.updateClientList = function (clientData) {
+        /* TODO: update client list shown on the screen */
         cache_client = clientData;
         _renderClient(clientData);
     };
 
     this.updateObList = function (obData) {
+        /* TODO: deprecated */
     };
 
     this.updateGame = function (gameData) {
-        cache_game = gameData;
+        /* TODO: do nothing */
     };
+
     // api -------------------------------------------
     this.getSetupPara = function () {
+        /* TODO: return game options */
         return {
             color: colorOption[colorId]
         };
@@ -111,7 +115,9 @@ var Prepare = function (container, opts_in) {
         html['startBtn'] = $(HTML.startBtn).appendTo(html['container']);
         html['startBtn'].click(function () {
           window.test.start();
-          //$.get('/Host/Start');
+         /* TODO: use the line below in real env
+              $.get('/Host/Start');
+         */
         });
 
         // color selector

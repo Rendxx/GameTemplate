@@ -1,5 +1,11 @@
+/* TODO:
+    ClientList manager all clients join the game.
+    - It will tell Prepare-Module when client list changes.
+    - It will initialize the player data when game starts.
+*/
 ﻿
 var ClientList = function (opts_in) {
+    "use strick";
     // Property -----------------------------------------------
     var that = this,
         _max = 5,
@@ -9,12 +15,12 @@ var ClientList = function (opts_in) {
         players = [];       // queue of players, starts from 0
 
     // callback ------------------------------------------
-    this.onUpdateClient = null;
-    this.onUpdateOb = null;   // deprecated
+    this.onUpdateClient = null;               /* TODO: callback: send client data if update */
+    this.onUpdateOb = null;                   /* TODO: deprecated */
 
     // API -----------------------------------------------
-    // reset game with given data
     this.reset = function (clientData) {
+        /* TODO: reset all client data */
         clients = {};
         players = [];
         for (var i = 0; i < _max; i++) players[i] = null;
@@ -24,8 +30,8 @@ var ClientList = function (opts_in) {
         if (this.onUpdateClient) this.onUpdateClient(clients);
     };
 
-    // refresh client list
     this.updateClientList = function (clientData) {
+        /* TODO: update the client data, keep them as same as the input */
         for (var id in clients) {
             if (id in clientData) continue;
             removeClient(id);
@@ -37,22 +43,23 @@ var ClientList = function (opts_in) {
         if (this.onUpdateClient) this.onUpdateClient(clients);
     };
 
-    // refresh ob list
     this.updateObList = function (obData) {
-      // deprecated
+        /* TODO: deprecated */
     };
 
-    // get client data
     this.getClientList = function () {
+        /* TODO: initialize the client data. */
         return players;
     };
 
     // Lock -----------------------------------------------
     this.lock = function () {
+        /* TODO: make client list unchangeable. */
         _isLocker = true;
     };
 
     this.unlock = function () {
+        /* TODO: make client list changeable. */
         _isLocker = false;
     };
 

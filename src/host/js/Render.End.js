@@ -1,3 +1,8 @@
+/* TODO:
+    End-Screen is the screen after game end.
+    Show the game result in this screen.
+*/﻿
+
 ﻿var Style = require('../less/End.less');
 
 var HTML = {
@@ -11,6 +16,8 @@ var CSS = {
 };
 
 var End = function (container) {
+    "use strick";
+    // property -----------------------------------------------
     var html_wrap = $('.end'),
         html_content = null,
         html_renew = null;
@@ -23,21 +30,29 @@ var End = function (container) {
 
     // interface controll --------------------------------
     this.show = function () {
+        /* TODO: show End-Screen */
         html['container'].fadeIn();
     };
 
     this.hide = function () {
+        /* TODO: hide End-Screen */
         html['container'].fadeOut();
     };
 
     // Update ---------------------------------------
     this.updateClientList = function (clientData) {
+        /* TODO: do nothing */
     };
 
     this.updateObList = function (obData) {
+        /* TODO: deprecated */
     };
 
     this.updateGame = function (gameData) {
+        /* TODO:
+            create End-Screen.
+            end data should be contained in input data.
+        */
         if (gameData && gameData.end) {
             var s = "";
             html['list'].empty();

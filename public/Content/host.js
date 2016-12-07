@@ -47,20 +47,21 @@
   \***************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	var ClientList = __webpack_require__(/*! ./js/ClientList.js */ 1);
-	var Core = __webpack_require__(/*! ./js/Core.js */ 2);
-	var Render = {
-	  Prepare: __webpack_require__(/*! ./js/Render.Prepare.js */ 3),
-	  Main: __webpack_require__(/*! ./js/Render.Main.js */ 8),
-	  End: __webpack_require__(/*! ./js/Render.End.js */ 11)
-	};
+	/* TODO:
+	    Fetch all modules and put them into a global object.
+	    Then we can use them in Host.html.
+	*/
 	
 	var Style = __webpack_require__(/*! ./less/Index.less */ 14);
 	
 	window.GAME = {
-	  ClientList: ClientList,
-	  Core: Core,
-	  Render: Render
+	  ClientList: __webpack_require__(/*! ./js/ClientList.js */ 1),
+	  Core: __webpack_require__(/*! ./js/Core.js */ 2),
+	  Render: {
+	    Prepare: __webpack_require__(/*! ./js/Render.Prepare.js */ 3),
+	    Main: __webpack_require__(/*! ./js/Render.Main.js */ 8),
+	    End: __webpack_require__(/*! ./js/Render.End.js */ 11)
+	  }
 	};
 
 /***/ },
@@ -70,9 +71,16 @@
   \***********************************/
 /***/ function(module, exports) {
 
+	/* TODO:
+	    ClientList manager all clients join the game.
+	    - It will tell Prepare-Module when client list changes.
+	    - It will initialize the player data when game starts.
+	*/
 	
 	var ClientList = function (opts_in) {
+	    "use strick";
 	    // Property -----------------------------------------------
+	
 	    var that = this,
 	        _max = 5,
 	        _isLocker = false;
@@ -82,12 +90,12 @@
 	    players = []; // queue of players, starts from 0
 	
 	    // callback ------------------------------------------
-	    this.onUpdateClient = null;
-	    this.onUpdateOb = null; // deprecated
+	    this.onUpdateClient = null; /* TODO: callback: send client data if update */
+	    this.onUpdateOb = null; /* TODO: deprecated */
 	
 	    // API -----------------------------------------------
-	    // reset game with given data
 	    this.reset = function (clientData) {
+	        /* TODO: reset all client data */
 	        clients = {};
 	        players = [];
 	        for (var i = 0; i < _max; i++) players[i] = null;
@@ -97,8 +105,8 @@
 	        if (this.onUpdateClient) this.onUpdateClient(clients);
 	    };
 	
-	    // refresh client list
 	    this.updateClientList = function (clientData) {
+	        /* TODO: update the client data, keep them as same as the input */
 	        for (var id in clients) {
 	            if (id in clientData) continue;
 	            removeClient(id);
@@ -110,22 +118,23 @@
 	        if (this.onUpdateClient) this.onUpdateClient(clients);
 	    };
 	
-	    // refresh ob list
 	    this.updateObList = function (obData) {
-	        // deprecated
+	        /* TODO: deprecated */
 	    };
 	
-	    // get client data
 	    this.getClientList = function () {
+	        /* TODO: initialize the client data. */
 	        return players;
 	    };
 	
 	    // Lock -----------------------------------------------
 	    this.lock = function () {
+	        /* TODO: make client list unchangeable. */
 	        _isLocker = true;
 	    };
 	
 	    this.unlock = function () {
+	        /* TODO: make client list changeable. */
 	        _isLocker = false;
 	    };
 	
@@ -174,8 +183,18 @@
   \*****************************/
 /***/ function(module, exports) {
 
+	/* TODO:
+	    This is the primary part of this game.
+	    - It setups the game with initial options and create setup data.
+	    - It receives and run user's operation.
+	    - It keeps sending game data to renderer, server and clients.
+	    - It monitors game process and decides the next status of the game.
+	*/
+	
 	var Core = function () {
+	    "use strick";
 	    // property -----------------------------------------------
+	
 	    var that = this,
 	        start = false,
 	        _color = null,
@@ -185,14 +204,24 @@
 	        _playerPos = [];
 	
 	    // message -----------------------------------------------
-	    this.send = null; // (code, content)
+	    this.send = null; /* TODO: this.send(code, content): This function should be set by Host-Manager, it is used to send message out */
 	
-	    this.receive = function (msg) {};
+	    this.receive = function (msg) {
+	        /* TODO:
+	            receive unordinary message.
+	            you can use this port to handle customized message format
+	        */
+	    };
 	
 	    this.action = function (clientId, dat) {
-	        if (!start) return;
+	        /* TODO:
+	            will be fired when a client takes a move.
+	            analysis the action data and handle this change.
+	        */
 	
+	        if (!start) return;
 	        if (dat == "END") {
+	            // End the game if a client send "END" and marker it as the winner
 	            var p = [];
 	            for (var i = 0; i < _players.length; i++) {
 	                p[i] = { id: _players[i].id, name: _players[i].name, win: false };
@@ -208,9 +237,12 @@
 	                });
 	            }
 	            window.test.end();
-	            //$.get('/Host/End')
+	            /* TODO: use the line below in real env
+	                 $.get('/Host/End')
+	            */
 	            start = false;
 	        } else {
+	            // otherwise move the player's marker
 	            var pos = _playerPos[_playerMap[clientId]];
 	            pos[0] = Math.max(0, Math.min(100, pos[0] + dat[0]));
 	            pos[1] = Math.max(0, Math.min(100, pos[1] + dat[1]));
@@ -223,14 +255,18 @@
 	    };
 	
 	    // callback ------------------------------------------
-	    this.onUpdated = null; // (gameData)
-	    this.onSetuped = null; // (setupData)
-	    this.clientSetup = null; // (target, clientData)
-	    this.clientUpdate = null; // (target, clientData)
+	    this.onUpdated = null; // (gameData): becalled when game updates
+	    this.onSetuped = null; // (setupData): be called when game setups
+	    this.clientSetup = null; // (target, clientData) setup client, be called when game setups
+	    this.clientUpdate = null; // (target, clientData) update client side, be called when anything related to that client updates
 	
 	    // update ---------------------------------------------
-	    // reset game with given data
 	    this.reset = function (setupData, gameData) {
+	        /* TODO:
+	            reset game with given data.
+	            the game will be recovered if gameData provided
+	        */
+	
 	        if (setupData != null) {
 	            _players = setupData.player;
 	            _playersId = setupData.playerId;
@@ -240,10 +276,16 @@
 	        }
 	        if (gameData != null) {
 	            _playerPos = gameData.pos;
+	            this.onUpdated({ pos: _playerPos });
 	        }
 	    };
 	
 	    this.setup = function (playerData, para) {
+	        /* TODO:
+	            setup the game with player data and initial options.
+	            then send the setup data out
+	        */
+	
 	        _players = [];
 	        _playersId = [];
 	        _playerMap = {};
@@ -280,20 +322,29 @@
 	
 	    // game ------------------------------------------------
 	    this.start = function () {
+	        /* TODO: game start */
 	        start = true;
 	    };
+	
 	    this.end = function () {
+	        /* TODO: game end */
 	        start = false;
 	    };
+	
 	    this.renew = function () {
+	        /* TODO: game renew */
 	        start = false;
 	        _color = null;
 	        _players = null;
 	        _playerMap = null;
 	        _playerPos = null;
 	    };
-	    this.pause = function () {};
-	    this.continue = function () {};
+	    this.pause = function () {
+	        /* TODO: game parse */
+	    };
+	    this.continue = function () {
+	        /* TODO: game continue */
+	    };
 	
 	    // setup -----------------------------------------------
 	    var _init = function () {}();
@@ -308,6 +359,11 @@
   \***************************************/
 /***/ function(module, exports, __webpack_require__) {
 
+	/* TODO:
+	    Prepare-Screen is the screen before game starting.
+	    You can set game options while waiting for other players.
+	*/
+	
 	var Style = __webpack_require__(/*! ../less/Prepare.less */ 4);
 	
 	var HTML = {
@@ -346,42 +402,41 @@
 	        colorId = null,
 	
 	
-	    // flag
-	    isShown = false,
-	
-	
 	    // cache
-	    cache_client = null,
-	        cache_ob = null,
-	        cache_game = null;
+	    cache_client = null;
 	
 	    // Callback -------------------------------------
 	
 	    // interface controll --------------------------------
 	    this.show = function () {
-	        isShown = true;
+	        /* TODO: show Prepare-Screen */
 	        _renderClient(cache_client);
 	        html['container'].fadeIn();
 	    };
 	
 	    this.hide = function () {
-	        isShown = false;
+	        /* TODO: hide Prepare-Screen */
 	        html['container'].fadeOut();
 	    };
 	
 	    // Update ---------------------------------------
 	    this.updateClientList = function (clientData) {
+	        /* TODO: update client list shown on the screen */
 	        cache_client = clientData;
 	        _renderClient(clientData);
 	    };
 	
-	    this.updateObList = function (obData) {};
+	    this.updateObList = function (obData) {
+	        /* TODO: deprecated */
+	    };
 	
 	    this.updateGame = function (gameData) {
-	        cache_game = gameData;
+	        /* TODO: do nothing */
 	    };
+	
 	    // api -------------------------------------------
 	    this.getSetupPara = function () {
+	        /* TODO: return game options */
 	        return {
 	            color: colorOption[colorId]
 	        };
@@ -424,7 +479,9 @@
 	        html['startBtn'] = $(HTML.startBtn).appendTo(html['container']);
 	        html['startBtn'].click(function () {
 	            window.test.start();
-	            //$.get('/Host/Start');
+	            /* TODO: use the line below in real env
+	                 $.get('/Host/Start');
+	            */
 	        });
 	
 	        // color selector
@@ -474,6 +531,11 @@
   \************************************/
 /***/ function(module, exports, __webpack_require__) {
 
+	/* TODO:
+	    Main-Screen is the main screen.
+	    It renders the game.
+	*/
+	
 	var Style = __webpack_require__(/*! ../less/Main.less */ 9);
 	
 	var HTML = {
@@ -482,6 +544,9 @@
 	};
 	
 	var Main = function (container) {
+	    "use strick";
+	    // property -----------------------------------------------
+	
 	    var width = 0,
 	        height = 0;
 	    var cache_pos = null;
@@ -492,20 +557,22 @@
 	    };
 	
 	    // callback ------------------------------------------
-	    this.onSetuped = null; // ()
 	
 	    // interface controll --------------------------------
 	    this.show = function () {
+	        /* TODO: show Main-Screen */
 	        html['container'].fadeIn();
 	        _render();
 	    };
 	
 	    this.hide = function () {
+	        /* TODO: hide Main-Screen */
 	        html['container'].fadeOut();
 	    };
 	
 	    // update ---------------------------------------------
 	    this.reset = function (setupData) {
+	        /* TODO: initialize the game */
 	        if (setupData == null) return;
 	        _clear();
 	        var player = setupData.player;
@@ -517,21 +584,28 @@
 	        _render();
 	    };
 	
-	    this.updateClientList = function (clientData) {};
+	    this.updateClientList = function (clientData) {
+	        /* TODO: do nothing */
+	    };
 	
 	    this.updateObList = function (obData) {
-	        // deprecated
+	        /* TODO: deprecated */
 	    };
 	
 	    this.updateGame = function (gameData) {
+	        /* TODO: update the game with game data */
 	        if (gameData == null) return;
 	        cache_pos = gameData.pos;
 	        _render();
 	    };
 	
 	    // game ------------------------------------------------
-	    this.pause = function () {};
-	    this.continue = function () {};
+	    this.pause = function () {
+	        /* TODO: game parse */
+	    };
+	    this.continue = function () {
+	        /* TODO: game continue */
+	    };
 	
 	    // private ---------------------------------------------
 	    var _clear = function () {
@@ -583,6 +657,11 @@
   \***********************************/
 /***/ function(module, exports, __webpack_require__) {
 
+	/* TODO:
+	    End-Screen is the screen after game end.
+	    Show the game result in this screen.
+	*/
+	
 	var Style = __webpack_require__(/*! ../less/End.less */ 12);
 	
 	var HTML = {
@@ -596,6 +675,9 @@
 	};
 	
 	var End = function (container) {
+	    "use strick";
+	    // property -----------------------------------------------
+	
 	    var html_wrap = $('.end'),
 	        html_content = null,
 	        html_renew = null;
@@ -608,19 +690,29 @@
 	
 	    // interface controll --------------------------------
 	    this.show = function () {
+	        /* TODO: show End-Screen */
 	        html['container'].fadeIn();
 	    };
 	
 	    this.hide = function () {
+	        /* TODO: hide End-Screen */
 	        html['container'].fadeOut();
 	    };
 	
 	    // Update ---------------------------------------
-	    this.updateClientList = function (clientData) {};
+	    this.updateClientList = function (clientData) {
+	        /* TODO: do nothing */
+	    };
 	
-	    this.updateObList = function (obData) {};
+	    this.updateObList = function (obData) {
+	        /* TODO: deprecated */
+	    };
 	
 	    this.updateGame = function (gameData) {
+	        /* TODO:
+	            create End-Screen.
+	            end data should be contained in input data.
+	        */
 	        if (gameData && gameData.end) {
 	            var s = "";
 	            html['list'].empty();
