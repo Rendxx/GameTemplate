@@ -3,10 +3,11 @@ var Core = function () {
     var that = this,
         start = false,
         msg = null,
-        _map = null,
+        _color = null,
         _players = null,
         _playersId = null,
-        _playerMap = null;
+        _playerMap = null,
+        _playerPos = [];
 
     // message -----------------------------------------------
     this.send = null;   // (code, content)
@@ -16,7 +17,6 @@ var Core = function () {
 
     this.action = function (clientId, dat) {
         if (!start) return;
-        msg = _players[_playerMap[clientId]].name + ":<b> " + dat.dat + " (" + (Date.now() - dat.time) + " ms)</b>";
 
         if (dat.dat == "END") {
             var p = {};
@@ -27,12 +27,16 @@ var Core = function () {
             this.onUpdated({ end: p });
             for (var i = 0; i < _players.length; i++) {
                 this.clientUpdate([_players[i].id], {
-                    rst: p[_players[i].id].win
+                    end: p[_players[i].id].win
                 });
             }
-            $.get('/Host/End')
+            //$.get('/Host/End')
         } else {
-            this.onUpdated({ msg: msg });
+            var pos = _playerPos[_playerMap[clientId]];
+            pos[0]= Math.max(0, Math.min(100,pos[0]+dat[0]));
+            pos[1]= Math.max(0, Math.min(100,pos[1]+dat[1]));
+
+            this.onUpdated({ pos: _playerPos });
             this.clientUpdate(_playersId, {
                 current: _playerMap[clientId]
             });
@@ -52,10 +56,11 @@ var Core = function () {
             _players = setupData.player;
             _playersId = setupData.playerId;
             _playerMap = setupData.playerMap;
-            _map = setupData.map;
+            _playerPos = setupData.playerPos;
+            _color = setupData.color;
         }
         if (gameData != null) {
-            msg = gameData.msg;
+            _playerPos = gameData.pos;
         }
     };
 
@@ -63,26 +68,33 @@ var Core = function () {
         _players = [];
         _playersId = [];
         _playerMap = {};
-        _map = para.map;
+        _playerPos = [];
+        _color = para.color;
 
         for (var i = 0, count = playerData.length; i < count; i++) {
             if (playerData[i] == null) continue;
-            _players.push(playerData[i]);
-            _playersId.push(_players[i].id);
-            _playerMap[_players[i].id] = i;
+
+            var playerObj={
+              id: playerData[i].id,
+              name: playerData[i].name
+            }
+            _players.push(playerObj);
+            _playersId.push(playerObj.id);
+            _playerMap[playerObj.id] = i;
+            _playerPos.push([~~(Math.random()*100), ~~(Math.random()*100)]);
         }
 
         this.onSetuped({
             playerMap: _playerMap,
             player: _players,
             playerId: _playersId,
-            map: _map
+            playerPos: _playerPos,
+            color: _color
         });
         for (var i = 0; i < _players.length; i++) {
             this.clientSetup([_players[i].id], {
                 id: i,
-                current:-1,
-                map: _map
+                current:-1
             });
         }
     };
@@ -96,9 +108,10 @@ var Core = function () {
     };
     this.renew = function () {
         start = false;
-        _map = null;
+        _color = null;
         _players = null;
         _playerMap = null;
+        _playerPos = null;
     };
     this.pause = function () { };
     this.continue = function () { };

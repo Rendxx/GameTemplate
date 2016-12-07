@@ -179,10 +179,11 @@
 	    var that = this,
 	        start = false,
 	        msg = null,
-	        _map = null,
+	        _color = null,
 	        _players = null,
 	        _playersId = null,
-	        _playerMap = null;
+	        _playerMap = null,
+	        _playerPos = [];
 	
 	    // message -----------------------------------------------
 	    this.send = null; // (code, content)
@@ -191,7 +192,6 @@
 	
 	    this.action = function (clientId, dat) {
 	        if (!start) return;
-	        msg = _players[_playerMap[clientId]].name + ":<b> " + dat.dat + " (" + (Date.now() - dat.time) + " ms)</b>";
 	
 	        if (dat.dat == "END") {
 	            var p = {};
@@ -202,12 +202,16 @@
 	            this.onUpdated({ end: p });
 	            for (var i = 0; i < _players.length; i++) {
 	                this.clientUpdate([_players[i].id], {
-	                    rst: p[_players[i].id].win
+	                    end: p[_players[i].id].win
 	                });
 	            }
-	            $.get('/Host/End');
+	            //$.get('/Host/End')
 	        } else {
-	            this.onUpdated({ msg: msg });
+	            var pos = _playerPos[_playerMap[clientId]];
+	            pos[0] = Math.max(0, Math.min(100, pos[0] + dat[0]));
+	            pos[1] = Math.max(0, Math.min(100, pos[1] + dat[1]));
+	
+	            this.onUpdated({ pos: _playerPos });
 	            this.clientUpdate(_playersId, {
 	                current: _playerMap[clientId]
 	            });
@@ -227,10 +231,11 @@
 	            _players = setupData.player;
 	            _playersId = setupData.playerId;
 	            _playerMap = setupData.playerMap;
-	            _map = setupData.map;
+	            _playerPos = setupData.playerPos;
+	            _color = setupData.color;
 	        }
 	        if (gameData != null) {
-	            msg = gameData.msg;
+	            _playerPos = gameData.pos;
 	        }
 	    };
 	
@@ -238,26 +243,33 @@
 	        _players = [];
 	        _playersId = [];
 	        _playerMap = {};
-	        _map = para.map;
+	        _playerPos = [];
+	        _color = para.color;
 	
 	        for (var i = 0, count = playerData.length; i < count; i++) {
 	            if (playerData[i] == null) continue;
-	            _players.push(playerData[i]);
-	            _playersId.push(_players[i].id);
-	            _playerMap[_players[i].id] = i;
+	
+	            var playerObj = {
+	                id: playerData[i].id,
+	                name: playerData[i].name
+	            };
+	            _players.push(playerObj);
+	            _playersId.push(playerObj.id);
+	            _playerMap[playerObj.id] = i;
+	            _playerPos.push([~~(Math.random() * 100), ~~(Math.random() * 100)]);
 	        }
 	
 	        this.onSetuped({
 	            playerMap: _playerMap,
 	            player: _players,
 	            playerId: _playersId,
-	            map: _map
+	            playerPos: _playerPos,
+	            color: _color
 	        });
 	        for (var i = 0; i < _players.length; i++) {
 	            this.clientSetup([_players[i].id], {
 	                id: i,
-	                current: -1,
-	                map: _map
+	                current: -1
 	            });
 	        }
 	    };
@@ -271,9 +283,10 @@
 	    };
 	    this.renew = function () {
 	        start = false;
-	        _map = null;
+	        _color = null;
 	        _players = null;
 	        _playerMap = null;
+	        _playerPos = null;
 	    };
 	    this.pause = function () {};
 	    this.continue = function () {};
@@ -459,44 +472,82 @@
 
 	var Style = __webpack_require__(/*! ../less/Main.less */ 9);
 	
-	var Main = function () {
-	    var html_wrap = $('.main'),
-	        html_title = null,
-	        html_content = null;
+	var HTML = {
+	    player: '<div class="_player"></div>',
+	    board: '<div class="_board"></div>'
+	};
+	
+	var Main = function (container) {
+	    var width = 0,
+	        height = 0;
+	    var cache_pos = null;
+	    var html = {
+	        container: $(container),
+	        board: null,
+	        player: []
+	    };
 	
 	    // callback ------------------------------------------
 	    this.onSetuped = null; // ()
 	
 	    // interface controll --------------------------------
 	    this.show = function () {
-	        html_content.empty();
-	        html_wrap.fadeIn();
+	        html['container'].fadeIn();
+	        _render();
 	    };
 	
 	    this.hide = function () {
-	        html_wrap.fadeOut();
+	        html['container'].fadeOut();
 	    };
 	
 	    // update ---------------------------------------------
-	    this.reset = function (setupData) {};
+	    this.reset = function (setupData) {
+	        if (setupData == null) return;
+	        var player = setupData.player;
+	        var color = setupData.color;
+	        cache_pos = setupData.playerPos;
+	        for (var i = 0; i < player.length; i++) {
+	            _addPlayer(i, player[i].name, color);
+	        }
+	        _render();
+	    };
 	
 	    this.updateClientList = function (clientData) {};
 	
-	    this.updateObList = function (obData) {};
+	    this.updateObList = function (obData) {
+	        // deprecated
+	    };
 	
 	    this.updateGame = function (gameData) {
 	        if (gameData == null) return;
-	        html_content.append('<div class="_item">' + gameData.msg + '</div>');
+	        cache_pos = gameData.pos;
+	        _render();
 	    };
 	
 	    // game ------------------------------------------------
 	    this.pause = function () {};
 	    this.continue = function () {};
 	
+	    // private ---------------------------------------------
+	    var _render = function () {
+	        width = html['board'].width();
+	        height = html['board'].height();
+	        for (var i = 0; i < cache_pos.length; i++) {
+	            var pos = cache_pos[i];
+	            html['player'][i][0].style.left = pos[0] / 100 * width + 'px';
+	            html['player'][i][0].style.top = pos[1] / 100 * height + 'px';
+	        }
+	    };
+	
+	    var _addPlayer = function (idx, name, color) {
+	        var playerNode = $(HTML.player).appendTo(html['board']).text(name);
+	        playerNode[0].style.backgroundColor = color;
+	        html['player'][idx] = playerNode;
+	    };
+	
 	    // setup -----------------------------------------------
 	    var _setupHtml = function () {
-	        html_title = $('<div class="_title">GAME MAIN</div>').appendTo(html_wrap);
-	        html_content = $('<div class="_content"></div>').appendTo(html_wrap);
+	        html['board'] = $(HTML.board).appendTo(html['container']);
 	    };
 	
 	    var _init = function () {

@@ -1,28 +1,49 @@
 // test -----------------------------------------------------------------
-window.test={
-  renew : function (){
-    window.msg('1|1|SERVER|2|{"clients":{},"obs":{},"status":1,"setup":null,"game":null}');
-  },
-  add : function (num){
-    if (num>6) return;
-    var obj = {};
-    for (var i=1;i<=num;i++){
-      obj['c'+i] = "player "+i;
+(function(){
+  var playerNum = 0;
+  window.test={
+    renew : function (){
+      window.msg('1|1|SERVER|2|{"clients":{},"obs":{},"status":1,"setup":null,"game":null}');
+    },
+    add : function (num){
+      if (num>6) {
+        console.log("%c Illegal Command ", 'color: #cc0000;');
+        return;
+      }
+      var obj = {};
+      for (var i=1;i<=num;i++){
+        obj['c'+i] = "player "+i;
+      }
+      playerNum=num;
+      window.msg('1|2|SERVER|8|{"clients":'+JSON.stringify(obj)+'}');
+    },
+    start : function (){
+      window.msg('1|3|SERVER|12|null');
+    },
+    client : function (id, x, y){
+      if(id>playerNum){
+        console.log("%c Illegal Command ", 'color: #cc0000;');
+        return;
+      }
+      window.msg('2|4|c'+id+'|3|['+x+','+y+']');
+    },
+    win : function (id){
+      if(id>playerNum){
+        console.log("%c Illegal Command ", 'color: #cc0000;');
+        return;
+      }
+      window.msg('2|4|c'+id+'|3|END');
     }
-    window.msg('1|2|SERVER|8|{"clients":'+JSON.stringify(obj)+'}');
-  },
-  start : function (){
-    window.msg('1|3|SERVER|12|null');
-  },
+  };
 
-
-};
-
-console.group("%c TEST COMMAND ", 'background: #ddeeff; color: #003399;');
-console.log("%c test.renew() ", 'color: #003399;');
-console.log("%c test.add(3) ", 'color: #003399;');
-console.log("%c test.start() ", 'color: #003399;');
-console.groupEnd();
+  console.group("%c TEST COMMAND ", 'background: #ddeeff; color: #003399;');
+  console.log("%c test.renew() ", 'color: #003399;');
+  console.log("%c test.add(3) ", 'color: #003399;');
+  console.log("%c test.start() ", 'color: #003399;');
+  console.log("%c test.client(1,10,10) ", 'color: #003399;');
+  console.log("%c test.win(1) ", 'color: #003399;');
+  console.groupEnd();
+})();
 
 // ---------------------------------------------------------------------
 
