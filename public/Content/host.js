@@ -52,20 +52,33 @@
 	    Then we can use them in Host.html.
 	*/
 	
-	var Style = __webpack_require__(/*! ./less/Index.less */ 14);
+	var Style = __webpack_require__(/*! ./less/Index.less */ 1);
 	
 	window.GAME = {
-	  ClientList: __webpack_require__(/*! ./js/ClientList.js */ 1),
-	  Core: __webpack_require__(/*! ./js/Core.js */ 2),
+	  ClientList: __webpack_require__(/*! ./js/ClientList.js */ 6),
+	  Core: __webpack_require__(/*! ./js/Core.js */ 7),
 	  Render: {
-	    Prepare: __webpack_require__(/*! ./js/Render.Prepare.js */ 3),
-	    Main: __webpack_require__(/*! ./js/Render.Main.js */ 8),
-	    End: __webpack_require__(/*! ./js/Render.End.js */ 11)
+	    Prepare: __webpack_require__(/*! ./js/Render.Prepare.js */ 8),
+	    Main: __webpack_require__(/*! ./js/Render.Main.js */ 11),
+	    End: __webpack_require__(/*! ./js/Render.End.js */ 14)
 	  }
 	};
 
 /***/ },
 /* 1 */
+/*!**********************************!*\
+  !*** ./src/host/less/Index.less ***!
+  \**********************************/
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 2 */,
+/* 3 */,
+/* 4 */,
+/* 5 */,
+/* 6 */
 /*!***********************************!*\
   !*** ./src/host/js/ClientList.js ***!
   \***********************************/
@@ -177,7 +190,7 @@
 	module.exports = ClientList;
 
 /***/ },
-/* 2 */
+/* 7 */
 /*!*****************************!*\
   !*** ./src/host/js/Core.js ***!
   \*****************************/
@@ -353,7 +366,7 @@
 	module.exports = Core;
 
 /***/ },
-/* 3 */
+/* 8 */
 /*!***************************************!*\
   !*** ./src/host/js/Render.Prepare.js ***!
   \***************************************/
@@ -364,7 +377,7 @@
 	    You can set game options while waiting for other players.
 	*/
 	
-	var Style = __webpack_require__(/*! ../less/Prepare.less */ 4);
+	var Style = __webpack_require__(/*! ../less/Prepare.less */ 9);
 	
 	var HTML = {
 	    playerList: '<div class="_playerList"></div>',
@@ -513,7 +526,7 @@
 	module.exports = Prepare;
 
 /***/ },
-/* 4 */
+/* 9 */
 /*!************************************!*\
   !*** ./src/host/less/Prepare.less ***!
   \************************************/
@@ -522,10 +535,8 @@
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 5 */,
-/* 6 */,
-/* 7 */,
-/* 8 */
+/* 10 */,
+/* 11 */
 /*!************************************!*\
   !*** ./src/host/js/Render.Main.js ***!
   \************************************/
@@ -536,7 +547,7 @@
 	    It renders the game.
 	*/
 	
-	var Style = __webpack_require__(/*! ../less/Main.less */ 9);
+	var Style = __webpack_require__(/*! ../less/Main.less */ 12);
 	
 	var HTML = {
 	    player: '<div class="_player"></div>',
@@ -641,7 +652,7 @@
 	module.exports = Main;
 
 /***/ },
-/* 9 */
+/* 12 */
 /*!*********************************!*\
   !*** ./src/host/less/Main.less ***!
   \*********************************/
@@ -650,8 +661,8 @@
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 10 */,
-/* 11 */
+/* 13 */,
+/* 14 */
 /*!***********************************!*\
   !*** ./src/host/js/Render.End.js ***!
   \***********************************/
@@ -662,7 +673,7 @@
 	    Show the game result in this screen.
 	*/
 	
-	var Style = __webpack_require__(/*! ../less/End.less */ 12);
+	var Style = __webpack_require__(/*! ../less/End.less */ 15);
 	
 	var HTML = {
 	    list: '<div class="_list"></div>',
@@ -747,20 +758,10 @@
 	module.exports = End;
 
 /***/ },
-/* 12 */
+/* 15 */
 /*!********************************!*\
   !*** ./src/host/less/End.less ***!
   \********************************/
-/***/ function(module, exports) {
-
-	// removed by extract-text-webpack-plugin
-
-/***/ },
-/* 13 */,
-/* 14 */
-/*!**********************************!*\
-  !*** ./src/host/less/Index.less ***!
-  \**********************************/
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
