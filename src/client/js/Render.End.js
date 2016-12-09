@@ -6,9 +6,7 @@
 ﻿var Style = require('../less/End.less');
 
 var HTML = {
-    list: '<div class="_list"></div>',
-    player: '<div class="_player"></div>',
-    renewBtn: '<div class="_renew">RENEW</div>'
+    result: '<div class="_result"><span></span></div>'
 };
 
 var CSS = {
@@ -21,28 +19,14 @@ var End = function (container) {
     var // html
         html = {
             container: $(container),
-            startBtn: null,
-            playerList: null,
-            player: [],
-            colorSelector: null,
-            colorList: null,
-            colorItem: {}
-        },
-
-        // data
-        maxPlayer = 0,
-        colorOption = null,
-        colorId = null,
-
-        // cache
-        cache_client = null;
+            result: null
+        };
 
     // Callback -------------------------------------
 
     // interface controll --------------------------------
     this.show = function () {
         /* TODO: show Prepare-Screen */
-        _renderClient(cache_client);
         html['container'].fadeIn();
     };
 
@@ -54,14 +38,22 @@ var End = function (container) {
     // Update ---------------------------------------
     this.updateGame = function (gameData) {
         /* TODO: do nothing */
+        if (gameData==null) return;
+        var win = gameData.end;
+        if (win){
+            html['result'].addClass(CSS.win);
+            html['result'].children('span').text('WIN');
+        }else{
+            html['result'].removeClass(CSS.win);
+            html['result'].children('span').text('LOSE');
+          }
     };
 
     // Private ---------------------------------------
-    var _renderClient = function (clientData) {
-    };
 
     // Setup -----------------------------------------
     var _setupHtml = function () {
+        html['result'] = $(HTML.result).appendTo(html['container']);
     };
 
     var _init = function () {

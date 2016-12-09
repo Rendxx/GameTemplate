@@ -12,17 +12,16 @@
     client : function (id){
       window.msg('2|5|HOST|2|{"current":'+id+'}');
     },
-    end : function (){
-      window.msg('1|5|SERVER|13|null');
+    end : function (isWin){
+      window.msg('2|5|HOST|2|{"end":'+isWin+'}');
+      window.msg('1|6|SERVER|13|null');
     },
     renew : function (){
-      window.msg('1|6|SERVER|14|null');
+      window.msg('1|7|SERVER|14|null');
     }
   };
 
   console.group("%c COMMAND FOR PROGRAM", 'background: #eeeeee; color: #666666;');
-  console.log("%c test.end() ", 'color: #666666;');
-  console.log("%c test.renew() ", 'color: #666666;');
   console.groupEnd();
   console.log('');
 
@@ -30,6 +29,8 @@
   console.log("%c test.reset() ", 'color: #003399;');
   console.log("%c test.start() ", 'color: #003399;');
   console.log("%c test.client(1) ", 'color: #003399;');
+  console.log("%c test.end(true) ", 'color: #003399;');
+  console.log("%c test.renew() ", 'color: #003399;');
   console.groupEnd();
   console.log('');
 })();
