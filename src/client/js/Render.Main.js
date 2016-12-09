@@ -21,6 +21,7 @@ var CSS = {
 var Main = function (container) {
     "use strick";
     // Property -------------------------------------
+    var that = this;
     var // html
         html = {
             container: $(container),
@@ -38,7 +39,6 @@ var Main = function (container) {
     // interface controll --------------------------------
     this.show = function () {
         /* TODO: show Prepare-Screen */
-        _showMsg();
         html['container'].fadeIn();
     };
 
@@ -50,18 +50,37 @@ var Main = function (container) {
     // Update ---------------------------------------
     this.reset = function (setupData) {
         /* TODO: initialize the game */
+        _showMsg('reset');
     };
 
     this.updateGame = function (gameData) {
-        /* TODO: do nothing */
+        /* TODO: receive update data from Host */
+        if (gameData==null) return;
+        _showMsg('current: '+gameData.current);
     };
 
     // Private ---------------------------------------
-    var _showMsg = function (clientData) {
+    var _showMsg = function (msg) {
+        html['info'].text(msg);
+    };
+
+    var _move = function (x,y) {
+        that.message.action([x,y]);
     };
 
     // Setup -----------------------------------------
     var _setupHtml = function () {
+        html['btnWrap'] = $(HTML.btnWrap).appendTo(html['container']);
+        html['info'] = $(HTML.info).appendTo(html['container']);
+        html['btn'].top = $(HTML.btn).appendTo(html['btnWrap']).addClass(CSS.top).text('Y +');
+        html['btn'].bottom = $(HTML.btn).appendTo(html['btnWrap']).addClass(CSS.bottom).text('Y -');
+        html['btn'].left = $(HTML.btn).appendTo(html['btnWrap']).addClass(CSS.left).text('X -');
+        html['btn'].right = $(HTML.btn).appendTo(html['btnWrap']).addClass(CSS.right).text('X +');
+
+        html['btn'].top.click(function(){_move(0,10);});
+        html['btn'].bottom.click(function(){_move(0,-10);});
+        html['btn'].left.click(function(){_move(-10,0);});
+        html['btn'].right.click(function(){_move(10,0);});
     };
 
     var _init = function () {

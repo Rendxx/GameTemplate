@@ -21,7 +21,7 @@
 
         var renderer = new Rendxx.Game.Client.Renderer({
             prepare: new GAME.Render.Prepare(document.getElementById('prepare'), {name:window.parent.CLIENTNAME}),
-            main: new GAME.Render.Main(document.getElementById('controller')),
+            main: new GAME.Render.Main(document.getElementById('main')),
             end: new GAME.Render.End(document.getElementById('end'))
         });
         var client = new Rendxx.Game.Client.Main({

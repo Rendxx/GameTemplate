@@ -7,13 +7,10 @@
     },
     start : function (){
       window.msg('1|3|SERVER|12|null');
+      window.msg('2|4|HOST|1|{"id":1,"current":-1}');
     },
-    client : function (id, x, y){
-      if(id>playerNum){
-        console.log("%c Illegal Command ", 'color: #cc0000;');
-        return;
-      }
-      window.msg('2|4|c'+id+'|3|['+x+','+y+']');
+    client : function (id){
+      window.msg('2|5|HOST|2|{"current":'+id+'}');
     },
     end : function (){
       window.msg('1|5|SERVER|13|null');
@@ -32,7 +29,7 @@
   console.group("%c TEST COMMAND ", 'background: #ddeeff; color: #003399;');
   console.log("%c test.reset() ", 'color: #003399;');
   console.log("%c test.start() ", 'color: #003399;');
-  console.log("%c test.client(1,10,10) ", 'color: #003399;');
+  console.log("%c test.client(1) ", 'color: #003399;');
   console.groupEnd();
   console.log('');
 })();
@@ -466,7 +463,7 @@ Rendxx.Game = Rendxx.Game || {};
                 component.main = components_in.main;
                 component.end = components_in.end;
                 current = component.prepare;
-                
+
                 component.main.message = that.message;
 
             } catch (e) {

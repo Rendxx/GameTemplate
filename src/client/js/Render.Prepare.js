@@ -7,7 +7,7 @@ var Style = require('../less/Prepare.less');
 
 var HTML = {
     nameTag: '<div class="_nameTag"></div>',
-    waiting: '<div class="_waiting">waiting </div>'
+    waiting: '<div class="_waiting">waiting</div>'
 };
 
 var Prepare = function (container, opts_in) {
