@@ -218,6 +218,7 @@
 	
 	    // message -----------------------------------------------
 	    this.send = null; /* TODO: this.send(code, content): This function should be set by Host-Manager, it is used to send message out */
+	    this.handler = {}; /* TODO: this is a package of hander for Render.Main */
 	
 	    this.receive = function (msg) {
 	        /* TODO:
@@ -233,38 +234,15 @@
 	        */
 	
 	        if (!start) return;
-	        if (dat == "END") {
-	            // End the game if a client send "END" and marker it as the winner
-	            var p = [];
-	            for (var i = 0; i < _players.length; i++) {
-	                p[i] = { id: _players[i].id, name: _players[i].name, win: false };
-	            }
-	            p[_playerMap[clientId]].win = true;
-	            this.onUpdated({
-	                end: p,
-	                pos: _playerPos
-	            });
-	            for (var i = 0; i < _players.length; i++) {
-	                this.clientUpdate([_players[i].id], {
-	                    end: p[i].win
-	                });
-	            }
-	            window.test.end();
-	            /* TODO: use the line below in real env
-	                 $.get('/Host/End')
-	            */
-	            start = false;
-	        } else {
-	            // otherwise move the player's marker
-	            var pos = _playerPos[_playerMap[clientId]];
-	            pos[0] = Math.max(0, Math.min(100, pos[0] + dat[0]));
-	            pos[1] = Math.max(0, Math.min(100, pos[1] + dat[1]));
+	        // otherwise move the player's marker
+	        var pos = _playerPos[_playerMap[clientId]];
+	        pos[0] = Math.max(0, Math.min(100, pos[0] + dat[0]));
+	        pos[1] = Math.max(0, Math.min(100, pos[1] + dat[1]));
 	
-	            this.onUpdated({ pos: _playerPos });
-	            this.clientUpdate(_playersId, {
-	                current: _playerMap[clientId]
-	            });
-	        }
+	        this.onUpdated({ pos: _playerPos });
+	        this.clientUpdate(_playersId, {
+	            current: _playerMap[clientId]
+	        });
 	    };
 	
 	    // callback ------------------------------------------
@@ -359,8 +337,34 @@
 	        /* TODO: game continue */
 	    };
 	
+	    // private ---------------------------------------------
+	    var win = function (clientId) {
+	        // Host select a player to win
+	        var p = [];
+	        for (var i = 0; i < _players.length; i++) {
+	            p[i] = { id: _players[i].id, name: _players[i].name, win: false };
+	        }
+	        p[_playerMap[clientId]].win = true;
+	        that.onUpdated({
+	            end: p,
+	            pos: _playerPos
+	        });
+	        for (var i = 0; i < _players.length; i++) {
+	            that.clientUpdate([_players[i].id], {
+	                end: p[i].win
+	            });
+	        }
+	        window.test.end();
+	        /* TODO: use the line below in real env
+	             $.get('/Host/End')
+	        */
+	        start = false;
+	    };
+	
 	    // setup -----------------------------------------------
-	    var _init = function () {}();
+	    var _init = function () {
+	        that.handler.win = win;
+	    }();
 	};
 	
 	module.exports = Core;
@@ -558,6 +562,7 @@
 	    "use strick";
 	    // property -----------------------------------------------
 	
+	    var that = this;
 	    var width = 0,
 	        height = 0;
 	    var cache_pos = null;
@@ -568,6 +573,7 @@
 	    };
 	
 	    // callback ------------------------------------------
+	    this.handler = {}; /* TODO: this is a package of hander provided by Core. You can use these handler to control the game at Host */
 	
 	    // interface controll --------------------------------
 	    this.show = function () {
@@ -590,7 +596,7 @@
 	        var color = setupData.color;
 	        cache_pos = setupData.playerPos;
 	        for (var i = 0; i < player.length; i++) {
-	            _addPlayer(i, player[i].name, color);
+	            _addPlayer(i, player[i].id, player[i].name, color);
 	        }
 	        _render();
 	    };
@@ -633,10 +639,16 @@
 	        }
 	    };
 	
-	    var _addPlayer = function (idx, name, color) {
+	    var _addPlayer = function (idx, clientId, name, color) {
 	        var playerNode = $(HTML.player).appendTo(html['board']).text(name);
 	        playerNode[0].style.backgroundColor = color;
 	        html['player'][idx] = playerNode;
+	
+	        playerNode[0].addEventListener('click', function () {
+	            $$.info.check(name + " will win this game?", null, true, "rgba(0,0,0,0.6)", function () {
+	                that.handler.win(clientId);
+	            });
+	        }, false);
 	    };
 	
 	    // setup -----------------------------------------------

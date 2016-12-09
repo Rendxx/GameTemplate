@@ -27,13 +27,6 @@
       }
       window.msg('2|4|c'+id+'|3|['+x+','+y+']');
     },
-    win : function (id){
-      if(id>playerNum){
-        console.log("%c Illegal Command ", 'color: #cc0000;');
-        return;
-      }
-      window.msg('2|4|c'+id+'|3|"END"');
-    },
     end : function (){
       window.msg('1|5|SERVER|13|null');
     },
@@ -53,7 +46,6 @@
   console.log("%c test.reset() ", 'color: #003399;');
   console.log("%c test.add(3) ", 'color: #003399;');
   console.log("%c test.client(1,10,10) ", 'color: #003399;');
-  console.log("%c test.win(1) ", 'color: #003399;');
   console.groupEnd();
   console.log('');
 })();
@@ -358,6 +350,8 @@ Rendxx.Game = Rendxx.Game || {};
                     host: null
                 });
 
+                component.renderer.setupHandler(component.game.handler);
+
                 // game
                 component.game.onUpdated = function (gameData) {
                     component.renderer.updateGame(gameData);
@@ -505,6 +499,10 @@ Rendxx.Game = Rendxx.Game || {};
 
         this.getSetupPara = function () {
             return component.prepare.getSetupPara();
+        };
+
+        this.setupHandler = function (handler) {
+            component.main.handler = handler;
         };
 
         // Status Change ------------------------------------------------------

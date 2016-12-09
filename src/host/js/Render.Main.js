@@ -13,6 +13,7 @@ var HTML = {
 var Main = function (container) {
     "use strick";
     // property -----------------------------------------------
+    var that = this;
     var width = 0,
         height = 0;
     var cache_pos = null;
@@ -23,6 +24,7 @@ var Main = function (container) {
     };
 
     // callback ------------------------------------------
+    this.handler = {};        /* TODO: this is a package of hander provided by Core. You can use these handler to control the game at Host */
 
     // interface controll --------------------------------
     this.show = function () {
@@ -45,7 +47,7 @@ var Main = function (container) {
         var color = setupData.color;
         cache_pos = setupData.playerPos;
         for (var i=0;i<player.length;i++){
-            _addPlayer(i, player[i].name, color);
+            _addPlayer(i, player[i].id, player[i].name, color);
         }
         _render();
     };
@@ -88,10 +90,17 @@ var Main = function (container) {
         }
     };
 
-    var _addPlayer = function (idx, name, color){
+    var _addPlayer = function (idx, clientId, name, color){
         var playerNode = $(HTML.player).appendTo(html['board']).text(name);
         playerNode[0].style.backgroundColor = color;
         html['player'][idx] = playerNode;
+
+        playerNode[0].addEventListener('click', function (){
+            $$.info.check(name + " will win this game?", null, true, "rgba(0,0,0,0.6)",
+            function () {
+                that.handler.win(clientId);
+            });
+        },false)
     };
 
     // setup -----------------------------------------------

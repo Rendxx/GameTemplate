@@ -19,6 +19,7 @@ var Core = function () {
 
     // message -----------------------------------------------
     this.send = null;         /* TODO: this.send(code, content): This function should be set by Host-Manager, it is used to send message out */
+    this.handler = {};        /* TODO: this is a package of hander for Render.Main */
 
     this.receive = function (msg) {
         /* TODO:
@@ -34,38 +35,15 @@ var Core = function () {
         */
 
         if (!start) return;
-        if (dat == "END") {
-            // End the game if a client send "END" and marker it as the winner
-            var p = [];
-            for (var i = 0; i < _players.length; i++) {
-                p[i]  = { id: _players[i].id, name: _players[i].name, win: false };
-            }
-            p[_playerMap[clientId]].win = true;
-            this.onUpdated({
-              end: p,
-              pos: _playerPos
-            });
-            for (var i = 0; i < _players.length; i++) {
-                this.clientUpdate([_players[i].id], {
-                    end: p[i].win
-                });
-            }
-            window.test.end();
-             /* TODO: use the line below in real env
-                  $.get('/Host/End')
-             */
-            start=false;
-        } else {
-            // otherwise move the player's marker
-            var pos = _playerPos[_playerMap[clientId]];
-            pos[0]= Math.max(0, Math.min(100,pos[0]+dat[0]));
-            pos[1]= Math.max(0, Math.min(100,pos[1]+dat[1]));
+        // otherwise move the player's marker
+        var pos = _playerPos[_playerMap[clientId]];
+        pos[0]= Math.max(0, Math.min(100,pos[0]+dat[0]));
+        pos[1]= Math.max(0, Math.min(100,pos[1]+dat[1]));
 
-            this.onUpdated({ pos: _playerPos });
-            this.clientUpdate(_playersId, {
-                current: _playerMap[clientId]
-            });
-        }
+        this.onUpdated({ pos: _playerPos });
+        this.clientUpdate(_playersId, {
+            current: _playerMap[clientId]
+        });
     };
 
     // callback ------------------------------------------
@@ -161,8 +139,33 @@ var Core = function () {
         /* TODO: game continue */
     };
 
+    // private ---------------------------------------------
+    var win = function (clientId) {
+        // Host select a player to win
+        var p = [];
+        for (var i = 0; i < _players.length; i++) {
+            p[i]  = { id: _players[i].id, name: _players[i].name, win: false };
+        }
+        p[_playerMap[clientId]].win = true;
+        that.onUpdated({
+          end: p,
+          pos: _playerPos
+        });
+        for (var i = 0; i < _players.length; i++) {
+            that.clientUpdate([_players[i].id], {
+                end: p[i].win
+            });
+        }
+        window.test.end();
+         /* TODO: use the line below in real env
+              $.get('/Host/End')
+         */
+        start=false;
+    };
+
     // setup -----------------------------------------------
     var _init = function () {
+        that.handler.win = win;
     }();
 };
 
