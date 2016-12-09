@@ -1,3 +1,44 @@
+// test -----------------------------------------------------------------
+(function(){
+  var playerNum = 0;
+  window.test={
+    reset : function (){
+      window.msg('1|1|SERVER|4|{"clients":{},"obs":{},"status":1,"setup":null}');
+    },
+    start : function (){
+      window.msg('1|3|SERVER|12|null');
+    },
+    client : function (id, x, y){
+      if(id>playerNum){
+        console.log("%c Illegal Command ", 'color: #cc0000;');
+        return;
+      }
+      window.msg('2|4|c'+id+'|3|['+x+','+y+']');
+    },
+    end : function (){
+      window.msg('1|5|SERVER|13|null');
+    },
+    renew : function (){
+      window.msg('1|6|SERVER|14|null');
+    }
+  };
+
+  console.group("%c COMMAND FOR PROGRAM", 'background: #eeeeee; color: #666666;');
+  console.log("%c test.end() ", 'color: #666666;');
+  console.log("%c test.renew() ", 'color: #666666;');
+  console.groupEnd();
+  console.log('');
+
+  console.group("%c TEST COMMAND ", 'background: #ddeeff; color: #003399;');
+  console.log("%c test.reset() ", 'color: #003399;');
+  console.log("%c test.start() ", 'color: #003399;');
+  console.log("%c test.client(1,10,10) ", 'color: #003399;');
+  console.groupEnd();
+  console.log('');
+})();
+
+// ---------------------------------------------------------------------
+
 Rendxx = Rendxx || {};
 Rendxx.Game = Rendxx.Game || {};
 
@@ -6,7 +47,7 @@ Rendxx.Game = Rendxx.Game || {};
  */
 
 (function (Game) {
-    // ROOM STATUS 
+    // ROOM STATUS
     DATA= {
         ROOMSTATUS: {
             'READY': 1,
@@ -35,7 +76,7 @@ Rendxx.Game = Rendxx.Game || {};
         var that = this;
         var ws = null;
         var wsConnStr;
-        
+
         this.onopen = null;
         this.onmessage = null;
         this.onerror = null;
@@ -43,7 +84,7 @@ Rendxx.Game = Rendxx.Game || {};
 
         this.start = function () {
             if (ws != null) ws.close();
-            ws = new WebSocket(wsConnStr);
+            ws = {conn:wsConnStr};
             ws.onopen = function (evt) {
                 if (that.onopen != null) that.onopen(evt);
             };
@@ -56,14 +97,16 @@ Rendxx.Game = Rendxx.Game || {};
             ws.onclose = function (evt) {
                 if (that.onclose != null) that.onclose(evt);
             };
+            window.msg = function (msg){
+              ws.onmessage({data:msg});
+            };
+            ws.onopen();
         };
         this.stop = function () {
-            if (ws == null) return;
-            ws.close();
+          console.log("%c ws: [close] ", "color:#660000; background: #ffdddd");
         };
         this.send = function (msg) {
-            if (ws == null) throw new Error('Connection is not available');
-            ws.send(msg);
+          console.log("%c ws: "+ msg+" ",  "color:#006600; background: #ddffdd");
         }
 
         var _init = function (opts) {
@@ -201,7 +244,7 @@ Rendxx.Game = Rendxx.Game || {};
         var _status = STATUS.READY,
             _setuped = false,           // true if host is ready to use
             _msgReceive = {};        // message handleing functions on received message
-        
+
         // Public function --------------------------------------------
         // setup and start working
         this.setup = function () {
@@ -361,16 +404,11 @@ Rendxx.Game = Rendxx.Game || {};
         };
 
         // Callback -----------------------------------------------------------
-        this.onSetuped = null;
         this.message = {};
 
         // public function ----------------------------------------------------
         this.reset = function (setupData) {
             if (setupData) component.main.reset(setupData);
-        };
-
-        this.getSetupPara = function () {
-            return component.prepare.getSetupPara();
         };
 
         // Status Change ------------------------------------------------------
@@ -428,17 +466,14 @@ Rendxx.Game = Rendxx.Game || {};
                 component.main = components_in.main;
                 component.end = components_in.end;
                 current = component.prepare;
-
-                component.main.onSetuped = function () {
-                    if (that.onSetuped) that.onSetuped();
-                };
+                
                 component.main.message = that.message;
 
             } catch (e) {
                 throw new Error('Unexpected Error in setuping components: '+e.message);
             }
         };
-                
+
         var _init = function (components_in) {
             _setupComponent(components_in);
         }(components_in);

@@ -3,25 +3,29 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test</title>
-    <!--Style-->
-    <link href="/Game/Test/content/client.css" rel="stylesheet" type="text/css" />
-    <link type="text/css" rel="stylesheet" href="/Game/Test/ClientController/controller.info.css" />
-    <link type="text/css" rel="stylesheet" href="/Game/Test/ClientController/controller.button.css" />
+    <title>Template</title>                                                 <!-- TODO: Page title -->
+    <link href="../Content/client.css" rel="stylesheet" type="text/css" />    <!-- TODO: Style file in absolute path -->
 </head>
 <body>
-    <!--Content-->
-    <div class="controller"></div>
+    <div id="prepare" class="prepare"></div>    <!--Prepare screen-->
+    <div id="main" class="main"></div>          <!--Main screen-->
+    <div id="end" class="end"></div>            <!--End screen-->
 
     <!--Script-->
-    <script type="text/javascript" src="/Game/Test/ClientController/controller.info.js"></script>
-    <script type="text/javascript" src="/Game/Test/ClientController/controller.button.js"></script>
-    <script type="text/javascript" src="/wwwroot/lib/jquery.min.js"></script>
-    <script type="text/javascript" src="/wwwroot/scripts/client/client.js"></script>
-    <script type="text/javascript" src="/Game/Test/content/client.js"></script>
+    <script type="text/javascript" src="/jQuery"></script>                <!-- TODO: load jQuery  -->
+    <script type="text/javascript" src="/TestEnv/client.js"></script>     <!-- TODO: load client file provided by GameCenter -->
+    <script type="text/javascript" src="../Content/client.js"></script>   <!-- TODO: load game client file  -->
     <script type="text/javascript">
+        window.parent.CLIENTID = 'c2';
+        window.parent.CLIENTNAME = 'Player 2';
+
+        var renderer = new Rendxx.Game.Client.Renderer({
+            prepare: new GAME.Render.Prepare(document.getElementById('prepare'), {name:window.parent.CLIENTNAME}),
+            main: new GAME.Render.Main(document.getElementById('controller')),
+            end: new GAME.Render.End(document.getElementById('end'))
+        });
         var client = new Rendxx.Game.Client.Main({
-            ui: new Rendxx.Game.Test.Client.ControlPad()
+            renderer: renderer
         });
         client.setup();
     </script>
