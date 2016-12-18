@@ -50,7 +50,7 @@ var Main = function (container) {
     // Update ---------------------------------------
     this.reset = function (setupData) {
         /* TODO: initialize the game */
-        _showMsg('reset');
+        _showMsg('reset:'+setupData.msg);
     };
 
     this.updateGame = function (gameData) {
