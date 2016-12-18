@@ -50,7 +50,7 @@ var Core = function () {
     this.onUpdated = null;      // (gameData): becalled when game updates
     this.onSetuped = null;      // (setupData): be called when game setups
     this.clientSetup = null;    // (target, clientData) setup client, be called when game setups
-    this.clientUpdate = null;   // (target, clientData) update client side, be called when anything related to that client updates
+    this.clientUpdate = null;   // (target, clientData, isTmp) update client side, be called when anything related to that client updates
 
     // update ---------------------------------------------
     this.reset = function (setupData, gameData) {

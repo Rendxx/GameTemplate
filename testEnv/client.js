@@ -166,7 +166,8 @@ Rendxx.Game = Rendxx.Game || {};
             'NO_CODE': 0,
             'CLIENT_SETUP': 1,
             'CLIENT_UPDATE': 2,
-            'ACTION': 3
+            'ACTION': 3,
+            'CLIENT_UPDATE_TMP': 4
         },
         CUSTOMIZED: 'CUSTOMIZED'
     };
