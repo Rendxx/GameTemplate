@@ -156,7 +156,11 @@ var Core = function () {
                 end: p[i].win
             });
         }
-        window.test.end();
+        if (window.TESTING===true){
+            window.test.end();
+        } else{
+            $.get('/Host/End');
+        }
          /* TODO: use the line below in real env
               $.get('/Host/End')
          */

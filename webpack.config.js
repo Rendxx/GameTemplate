@@ -3,8 +3,9 @@ var path = require('path');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var commonsPlugin = new webpack.optimize.CommonsChunkPlugin('common.js');
 var extractTextPlugin = new ExtractTextPlugin("./[name].css");
+var minimize = process.argv.indexOf('--optimize-minimize') !== -1;
 
-module.exports = {
+var setting = {
     plugins: [
       //commonsPlugin,
       extractTextPlugin
@@ -50,3 +51,9 @@ module.exports = {
         extensions: ['', '.js', '.json', '.scss']
     }
 };
+
+if (minimize) setting.entry = {
+    'host.min' : './src/host/Index',
+    'client.min' : './src/client/Index'
+}
+module.exports = setting;

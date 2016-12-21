@@ -74,8 +74,14 @@ var End = function (container) {
         html['list'] = $(HTML.list).appendTo(html['container']);
         html['renew'] = $(HTML.renewBtn).appendTo(html['container']);
         html['renew'].click(function () {
+        if (window.TESTING===true){
             window.test.renew();
-            //$.get('/Host/Renew');
+        } else{
+            $.get('/Host/Renew');
+        }
+         /* TODO: use the line below in real env
+              $.get('/Host/Renew');
+         */
         });
     };
 

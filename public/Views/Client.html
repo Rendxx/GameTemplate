@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Template</title>                                                 <!-- TODO: Page title -->
-    <link href="../Content/client.css" rel="stylesheet" type="text/css" />    <!-- TODO: Style file in absolute path -->
+    <link href="../Content/client.min.css" rel="stylesheet" type="text/css" />    <!-- TODO: Style file in absolute path -->
 </head>
 <body>
     <div id="prepare" class="prepare"></div>    <!--Prepare screen-->
@@ -14,11 +14,13 @@
     <!--Script-->
     <script type="text/javascript" src="../Lib/jquery.min.js"></script>   <!-- TODO: load jQuery  -->
     <script type="text/javascript" src="/TestEnv/client.js"></script>     <!-- TODO: load client file provided by GameCenter -->
-    <script type="text/javascript" src="../Content/client.js"></script>   <!-- TODO: load game client file  -->
+    <script type="text/javascript" src="../Content/client.min.js"></script>   <!-- TODO: load game client file  -->
     <script type="text/javascript">
-        window.parent.CLIENTID = 'c2';
-        window.parent.CLIENTNAME = 'Player 2';
-
+        window.TESTING = true;
+        if (window.TESTING===true){
+            window.parent.CLIENTID = 'c2';
+            window.parent.CLIENTNAME = 'Player 2';
+        }
         var renderer = new Rendxx.Game.Client.Renderer({
             prepare: new GAME.Render.Prepare(document.getElementById('prepare'), {name:window.parent.CLIENTNAME}),
             main: new GAME.Render.Main(document.getElementById('main')),

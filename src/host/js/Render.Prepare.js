@@ -114,7 +114,11 @@ var Prepare = function (container, opts_in) {
         // start btn
         html['startBtn'] = $(HTML.startBtn).appendTo(html['container']);
         html['startBtn'].click(function () {
-          window.test.start();
+        if (window.TESTING===true){
+            window.test.start();
+        } else{
+            $.get('/Host/Start');
+        }
          /* TODO: use the line below in real env
               $.get('/Host/Start');
          */

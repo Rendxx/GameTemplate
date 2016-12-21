@@ -77,8 +77,8 @@ var Main = function (container) {
         html['btn'].left = $(HTML.btn).appendTo(html['btnWrap']).addClass(CSS.left).text('X -');
         html['btn'].right = $(HTML.btn).appendTo(html['btnWrap']).addClass(CSS.right).text('X +');
 
-        html['btn'].top.click(function(){_move(0,10);});
-        html['btn'].bottom.click(function(){_move(0,-10);});
+        html['btn'].top.click(function(){_move(0,-10);});
+        html['btn'].bottom.click(function(){_move(0,10);});
         html['btn'].left.click(function(){_move(-10,0);});
         html['btn'].right.click(function(){_move(10,0);});
     };

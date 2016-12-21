@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Template</title>                                                 <!-- TODO: Page title -->
-    <link href="../Content/host.css" rel="stylesheet" type="text/css" />    <!-- TODO: Style file in absolute path -->
+    <link href="../Content/host.min.css" rel="stylesheet" type="text/css" />    <!-- TODO: Style file in absolute path -->
 </head>
 <body>
     <div id="prepare" class="prepare"></div>    <!--Prepare screen-->
@@ -15,9 +15,12 @@
     <script type="text/javascript" src="../Lib/jquery.min.js"></script>                <!-- TODO: load jQuery  -->
     <script type="text/javascript" src="../Lib/InfoBox.min.js"></script>               <!-- TODO: load InfoBox  -->
     <script type="text/javascript" src="/TestEnv/host.js"></script>       <!-- TODO: load host file provided by GameCenter -->
-    <script type="text/javascript" src="../Content/host.js"></script>     <!-- TODO: load game host file  -->
+    <script type="text/javascript" src="../Content/host.min.js"></script>     <!-- TODO: load game host file  -->
     <script type="text/javascript">
-        window.parent.HOSTID = 1;     /* TODO: Fake HOSTID, remove this line in real env */
+        window.TESTING = true;
+        if (window.TESTING===true){
+            window.parent.HOSTID = 1;     /* TODO: Fake HOSTID, remove this line in real env */
+        }
 
         /* TODO:
             1. build game options and pass it to Prepare-Module
