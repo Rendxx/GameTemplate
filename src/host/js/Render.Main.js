@@ -96,9 +96,12 @@ var Main = function (container) {
         html['player'][idx] = playerNode;
 
         playerNode[0].addEventListener('click', function (){
-            $$.info.check(name + " will win this game?", null, true, "rgba(0,0,0,0.6)",
-            function () {
+            $$.info.check({
+              content: name + " will win this game?",
+              bg: "rgba(0,0,0,0.6)",
+              callbackYes:function () {
                 that.handler.win(clientId);   // use handler to control game from HOST
+              }
             });
         },false)
     };

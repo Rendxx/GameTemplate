@@ -367,11 +367,11 @@ Rendxx.Game = Rendxx.Game || {};
                         content: JSON.stringify(clientData)
                     }));
                 };
-                component.game.clientUpdate = function (targets, clientData, isTMP) {
+                component.game.clientUpdate = function (targets, clientData, isTmp) {
                     component.websocket.send(Message.Encode({
                         type: Message.TYPE.HOST,
                         target: targets,
-                        code: isTmp?Message.CODE.HOST.CLIENT_UPDATE_TMP:Message.CODE.HOST.CLIENT_UPDATE,
+                        code: (isTmp===true)?Message.CODE.HOST.CLIENT_UPDATE_TMP:Message.CODE.HOST.CLIENT_UPDATE,
                         content: JSON.stringify(clientData)
                     }));
                 };
