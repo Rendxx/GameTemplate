@@ -96,7 +96,7 @@ Rendxx.Game = Rendxx.Game || {};
         this.onclose = null;
 
         this.start = function () {
-            if (ws != null) ws.close();
+            //if (ws != null) ws.close();
             ws = {conn:wsConnStr};
             ws.onopen = function (evt) {
                 if (that.onopen != null) that.onopen(evt);
